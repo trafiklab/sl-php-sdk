@@ -100,14 +100,17 @@ class SlStop implements Stop
                 DateTime::createFromFormat("Y-m-d H:i:s",
                     $json['depDate'] . ' ' . $json['depTime']);
         }
+
         if (key_exists('arrDate', $json)) {
             $this->_arrivalTime =
                 DateTime::createFromFormat("Y-m-d H:i:s",
                     $json['arrDate'] . ' ' . $json['arrTime']);
         }
+
         if (key_exists('track', $json)) {
             $this->_platform = $json['track'];
         }
+
         if ($this->_departureTime == null && $this->_arrivalTime == null && key_exists('date', $json)) {
             // This is a backup solution designed to handle origin/destination of legs in case of a walking link.
             $this->_departureTime =
