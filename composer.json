@@ -2,7 +2,7 @@
   "name": "trafiklab/sl-php-sdk",
   "description": "Use Swedish public transport data in your project with SL",
   "type": "library",
-  "license": "",
+  "license": "MPL-2.0",
   "authors": [
     {
       "name": "Bert Marcelis",
@@ -20,7 +20,7 @@
   "require": {
     "php": ">=7.1",
     "ext-json": "*",
-    "trafiklab/php-sdk-base": "dev-master"
+    "trafiklab/php-sdk-commons": "dev-master"
   },
   "require-dev": {
     "phpunit/phpunit": "^5.5",
@@ -31,7 +31,7 @@
   "repositories": [
     {
       "type": "vcs",
-      "url": "https://github.com/trafiklab/php-sdk-base"
+      "url": "https://github.com/trafiklab/php-sdk-commons"
     }
   ],
   "autoload": {
