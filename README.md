@@ -77,12 +77,12 @@ Detailed information about SL responses can be found at [the Trafiklab website](
 The following code example illustrates how you can plan a route from A to B
 
 ```    
-    // TODO: add exampel
+    // TODO: add example
 ```
 ##### Response
 
 ```
-   // TODO: add exampel
+   // TODO: add example
 ```
 
 ## Contributing
