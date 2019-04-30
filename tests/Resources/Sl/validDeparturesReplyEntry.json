@@ -1,0 +1,22 @@
+{
+  "GroupOfLine": "tunnelbanans röda linje",
+  "DisplayTime": "17:29",
+  "TransportMode": "METRO",
+  "LineNumber": "14",
+  "Destination": "Mörby centrum",
+  "JourneyDirection": 1,
+  "StopAreaName": "T-Centralen",
+  "StopAreaNumber": 1051,
+  "StopPointNumber": 1051,
+  "StopPointDesignation": "3",
+  "TimeTabledDateTime": "2019-04-29T17:29:00",
+  "ExpectedDateTime": "2019-04-29T17:29:00",
+  "JourneyNumber": 28958,
+  "Deviations": [
+    {
+      "Text": "Inställd",
+      "Consequence": "CANCELLED",
+      "ImportanceLevel": 0
+    }
+  ]
+}
