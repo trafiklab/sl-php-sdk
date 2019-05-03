@@ -5,9 +5,9 @@ namespace Trafiklab\Sl\Model;
 
 
 use DateTime;
-use Trafiklab\Common\Model\Contract\Stop;
+use Trafiklab\Common\Model\Contract\StopWithRealtime;
 
-class SlStop implements Stop
+class SlStop implements StopWithRealtime
 {
     private $_stopId;
     private $_stopName;
@@ -16,6 +16,8 @@ class SlStop implements Stop
     private $_latitude;
     private $_longitude;
     private $_platform;
+    private $_realtimeArrivalTime;
+    private $_realtimeDepartureTime;
 
     public function __construct(array $json)
     {
@@ -87,9 +89,39 @@ class SlStop implements Stop
         return $this->_platform;
     }
 
+    /**
+     * @return DateTime|null   The estimated (real-time) departure time at this stop. Null if there is no data about
+     *                         the departure time at this stop area.
+     */
+    public function getEstimatedDepartureTime(): ?DateTime
+    {
+        return $this->_realtimeDepartureTime != null ? $this->_realtimeDepartureTime : $this->_departureTime;
+    }
+
+    /**
+     * The arrival time at this stop.
+     * @return DateTime|null The estimated (real-time) arrival time at this stop. Null if there is no data about the
+     *                       arrival time at this stop area.
+     */
+    public function getEstimatedArrivalTime(): ?DateTime
+    {
+        return $this->_realtimeArrivalTime != null ? $this->_realtimeArrivalTime : $this->_arrivalTime;
+    }
+
+    /**
+     * Whether or not this vehicle's stop is cancelled.
+     * @return bool
+     */
+    public function isCancelled(): bool
+    {
+        // TODO: Correctly parse and implement isCancelled() method.
+        return false;
+    }
+
     private function parseApiResponse(array $json)
     {
-        $this->_stopId = $json['extId'];
+        // Remove leading 30010
+        $this->_stopId = substr($json['mainMastExtId'], 5);
         $this->_stopName = $json['name'];
 
         $this->_latitude = $json['lat'];
@@ -101,10 +133,22 @@ class SlStop implements Stop
                     $json['depDate'] . ' ' . $json['depTime']);
         }
 
+        if (key_exists('rtDepDate', $json)) {
+            $this->_realtimeDepartureTime =
+                DateTime::createFromFormat("Y-m-d H:i:s",
+                    $json['rtDepDate'] . ' ' . $json['rtDepDate']);
+        }
+
         if (key_exists('arrDate', $json)) {
             $this->_arrivalTime =
                 DateTime::createFromFormat("Y-m-d H:i:s",
                     $json['arrDate'] . ' ' . $json['arrTime']);
+        }
+
+        if (key_exists('rtArrDate', $json)) {
+            $this->_realtimeArrivalTime =
+                DateTime::createFromFormat("Y-m-d H:i:s",
+                    $json['rtArrDate'] . ' ' . $json['rtArrDate']);
         }
 
         if (key_exists('track', $json)) {
@@ -120,5 +164,4 @@ class SlStop implements Stop
         }
 
     }
-
 }

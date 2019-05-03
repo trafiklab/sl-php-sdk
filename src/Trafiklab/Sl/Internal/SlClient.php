@@ -5,8 +5,15 @@ namespace Trafiklab\Sl\Internal;
 
 use Trafiklab\Common\Internal\CurlWebClient;
 use Trafiklab\Common\Internal\WebClient;
+use Trafiklab\Common\Internal\WebResponse;
 use Trafiklab\Common\Model\Contract\TimeTableResponse;
 use Trafiklab\Common\Model\Enum\TimeTableType;
+use Trafiklab\Common\Model\Exceptions\InvalidKeyException;
+use Trafiklab\Common\Model\Exceptions\InvalidRequestException;
+use Trafiklab\Common\Model\Exceptions\InvalidStoplocationException;
+use Trafiklab\Common\Model\Exceptions\KeyRequiredException;
+use Trafiklab\Common\Model\Exceptions\QuotaExceededException;
+use Trafiklab\Common\Model\Exceptions\ServiceUnavailableException;
 use Trafiklab\Sl\Model\SlRoutePlanningRequest;
 use Trafiklab\Sl\Model\SlRoutePlanningResponse;
 use Trafiklab\Sl\Model\SlTimeTableRequest;
@@ -64,6 +71,8 @@ class SlClient
 
         $response = $this->_webClient->makeRequest($endpoint, $parameters);
         $json = json_decode($response->getBody(), true);
+
+        $this->validateSlResponse($response, $json, "SL departures");
         return new SlTimeTableResponse($json);
     }
 
@@ -76,7 +85,7 @@ class SlClient
     }
 
     /**
-     * @param                      $key
+     * @param                        $key
      * @param SlRoutePlanningRequest $request
      *
      * @return SlRoutePlanningResponse
@@ -86,8 +95,8 @@ class SlClient
     {
         $parameters = [
             "key" => $key,
-            "originId" => $request->getOriginId(),
-            "destId" => $request->getDestinationId(),
+            "originExtId" => $request->getOriginId(),
+            "destExtId" => $request->getDestinationId(),
             "date" => $request->getDateTime()->format("Y-m-d"),
             "time" => $request->getDateTime()->format("H:i"),
             "lang" => $request->getLang(),
@@ -104,11 +113,13 @@ class SlClient
         }
 
         if ($request->getViaId() != null) {
-            $parameters['viaId'] =  $request->getViaId();
+            $parameters['viaId'] = $request->getViaId();
         }
 
         $response = $this->_webClient->makeRequest(self::TRIPS_ENDPOINT, $parameters);
         $json = json_decode($response->getBody(), true);
+
+        $this->validateSlResponse($response, $json, "SL reseplanerare");
         return new SlRoutePlanningResponse($json);
     }
 
@@ -116,5 +127,60 @@ class SlClient
     private function getUserAgent()
     {
         return $this->applicationUserAgent . " VIA " . self::SDK_USER_AGENT;
+    }
+
+    /**
+     * @param WebResponse $response
+     * @param array       $json
+     * @param string      $api
+     *
+     * @throws InvalidKeyException
+     * @throws InvalidRequestException
+     * @throws InvalidStoplocationException
+     * @throws KeyRequiredException
+     * @throws QuotaExceededException
+     * @throws ServiceUnavailableException
+     */
+    private function validateSlResponse(WebResponse $response, array $json, string $api)
+    {
+        if (key_exists("StatusCode", $json) && $json['StatusCode'] != 0) {
+            switch ($json['StatusCode']) {
+                case '1001':
+                    throw new KeyRequiredException();
+                    break;
+                case '1002':
+                    throw new InvalidKeyException($response->getRequestParameter('key'));
+                    break;
+                case '1003':
+                    throw new InvalidRequestException("Invalid API",
+                        $response->getRequestParameters());
+                    break;
+                case '1004':
+                    throw new ServiceUnavailableException($response->getUrl(),
+                        "The service is currently unavailable for request with a priority over 2.");
+                case '1005':
+                    throw new InvalidKeyException($response->getRequestParameter('key'));
+                    break;
+                case '1006':
+                    throw new QuotaExceededException($api,
+                        $response->getRequestParameter('key'), "Requests per minute exceeded");
+                case '1007':
+                    throw new QuotaExceededException($api,
+                        $response->getRequestParameter('key'), "Requests per month exceeded");
+                    break;
+                case '5321':
+                case '5322':
+                case '5323':
+                    throw new InvalidRequestException("One or more parameters are invalid",
+                        $response->getRequestParameters());
+                    break;
+                case '4001':
+                    throw new InvalidStoplocationException($response->getRequestParameters());
+                    break;
+                default:
+                    throw new InvalidRequestException($json['Message'], $response->getRequestParameters());
+                    break;
+            }
+        }
     }
 }

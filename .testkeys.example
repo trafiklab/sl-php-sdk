@@ -2,5 +2,5 @@
 # Leaving keys empty will skip the tests which require the missing key.
 # Copy this file to .testKeys in order to use it.
 
-SLDEPARTURES31_API_KEY=
+SLPLANNER31_API_KEY=
 SLREALTID4_API_KEY=

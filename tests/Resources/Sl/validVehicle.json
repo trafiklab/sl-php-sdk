@@ -1,0 +1,13 @@
+{
+"name": "buss 57",
+"num": "36535",
+"line": "57",
+"catOut": "BUS     ",
+"catIn": "BUS",
+"catCode": "3",
+"catOutS": "BUS",
+"catOutL": "BUSS ",
+"operatorCode": "SL",
+"operator": "Storstockholms Lokaltrafik",
+"admin": "100057"
+}

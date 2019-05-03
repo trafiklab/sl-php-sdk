@@ -5,6 +5,7 @@ namespace Trafiklab\Sl\Model;
 
 
 use Trafiklab\Common\Model\Contract\Vehicle;
+use Trafiklab\Common\Model\Enum\TransportType;
 
 class SlVehicle implements Vehicle
 {
@@ -83,9 +84,27 @@ class SlVehicle implements Vehicle
     {
         $this->_name = $json['name'];
         $this->_number = $json['num'];
-        $this->_type = $json['catOutL'];
-        $this->_operatorCode = $json['operatorCode'];
-        $this->_operatorName = $json['operator'];
+
+        switch (trim($json['catOut'])) {
+            case "TRAIN":
+                $this->_type = TransportType::TRAIN;
+                break;
+            case "TRAM":
+                $this->_type = TransportType::TRAM;
+                break;
+            case "BUS":
+                $this->_type = TransportType::BUS;
+                break;
+            case "METRO":
+                $this->_type = TransportType::METRO;
+                break;
+            case "SHIP":
+                $this->_type = TransportType::SHIP;
+                break;
+        }
+
+        $this->_operatorCode = 275;
+        $this->_operatorName = "SL";
         $this->_operatorUrl = "https://sl.se";
     }
 }

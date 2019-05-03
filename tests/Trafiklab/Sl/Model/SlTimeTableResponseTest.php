@@ -6,7 +6,6 @@ namespace Trafiklab\Sl\Model;
 
 use PHPUnit_Framework_TestCase;
 use Trafiklab\Common\Model\Enum\TimeTableType;
-use Trafiklab\Sl\Model\SlTimeTableResponse;
 
 class SlTimeTableResponseTest extends PHPUnit_Framework_TestCase
 {

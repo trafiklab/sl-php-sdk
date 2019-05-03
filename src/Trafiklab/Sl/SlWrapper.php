@@ -5,9 +5,10 @@ namespace Sl;
 use Exception;
 use Trafiklab\Common\Model\Contract\RoutePlanningResponse;
 use Trafiklab\Common\Model\Contract\TimeTableResponse;
+use Trafiklab\Common\Model\Exceptions\KeyRequiredException;
+use Trafiklab\Sl\Internal\SlClient;
 use Trafiklab\Sl\Model\SlRoutePlanningRequest;
 use Trafiklab\Sl\Model\SlTimeTableRequest;
-use Trafiklab\Sl\Internal\SlClient;
 
 class SlWrapper
 {
@@ -76,24 +77,24 @@ class SlWrapper
     }
 
     /**
-     * @throws Exception
+     * @throws KeyRequiredException
      */
     private function requireValidTimeTablesKey()
     {
         if ($this->_key_stolptidstabeller == null || empty($this->_key_stolptidstabeller)) {
-            throw new Exception(
-                "No Timetables API key configured. Obtain a free key at https://www.trafiklab.se/api", 403);
+            throw new KeyRequiredException(
+                "No Timetables API key configured. Obtain a free key at https://www.trafiklab.se/api");
         }
     }
 
     /**
-     * @throws Exception
+     * @throws KeyRequiredException
      */
     private function requireValidRouteplannerKey()
     {
-        if ($this->_key_stolptidstabeller == null || empty($this->_key_stolptidstabeller)) {
-            throw new Exception(
-                "No Routeplanner API key configured. Obtain a free key at https://www.trafiklab.se/api", 403);
+        if ($this->_key_reseplanerare == null || empty($this->_key_reseplanerare)) {
+            throw new KeyRequiredException(
+                "No Routeplanner API key configured. Obtain a free key at https://www.trafiklab.se/api");
         }
     }
 }

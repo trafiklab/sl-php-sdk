@@ -7,7 +7,7 @@ namespace Trafiklab\Sl\Model;
 use DateTime;
 use PHPUnit_Framework_TestCase;
 
-class LegTest extends PHPUnit_Framework_TestCase
+class SlLegTest extends PHPUnit_Framework_TestCase
 {
     function testConstructor_validDepartureBoardJson_shouldReturnCorrectObjectRepresentation()
     {
@@ -15,7 +15,7 @@ class LegTest extends PHPUnit_Framework_TestCase
         $leg = new SlLeg($jsonArray);
 
         self::assertEquals("Sergels torg", $leg->getOrigin()->getStopName());
-        self::assertEquals(400111505, $leg->getOrigin()->getStopId());
+        self::assertEquals(1000, $leg->getOrigin()->getStopId());
         self::assertEquals(new DateTime("2019-05-03 00:21:00"), $leg->getOrigin()->getScheduledDepartureTime());
         self::assertNull($leg->getOrigin()->getScheduledArrivalTime());
         self::assertEquals("Södra station (på Swedenborgsgatan)", $leg->getDestination()->getStopName());

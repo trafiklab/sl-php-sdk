@@ -190,7 +190,8 @@ class SlTimeTableEntry implements TimeTableEntryWithRealTime
                 break;
         }
 
-        if ($json['Deviations'] != null) {
+        $this->_isCancelled = false;
+        if (key_exists('Deviations', $json) && !empty($json['Deviations'])) {
             foreach ($json['Deviations'] as $deviation) {
                 if ($deviation['Consequence'] == "CANCELLED") {
                     $this->_isCancelled = true;

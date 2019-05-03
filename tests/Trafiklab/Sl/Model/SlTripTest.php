@@ -4,10 +4,9 @@
 
 namespace Trafiklab\Sl\Model;
 
-use DateTime;
 use PHPUnit_Framework_TestCase;
 
-class TripTest extends PHPUnit_Framework_TestCase
+class SlTripTest extends PHPUnit_Framework_TestCase
 {
     function testConstructor_validDepartureBoardJson_shouldReturnCorrectObjectRepresentation()
     {
