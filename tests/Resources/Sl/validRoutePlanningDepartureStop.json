@@ -1,0 +1,13 @@
+{
+  "name": "Sergels torg",
+  "id": "A=1@O=Sergels torg@X=18064623@Y=59333929@U=74@L=400111505@",
+  "extId": "400111505",
+  "routeIdx": 10,
+  "lon": 18.064623,
+  "lat": 59.333929,
+  "depTime": "00:21:00",
+  "depDate": "2019-05-03",
+  "hasMainMast": true,
+  "mainMastId": "A=1@O=Sergels torg (Stockholm)@X=18064561@Y=59334621@U=74@L=300101000@",
+  "mainMastExtId": "300101000"
+}

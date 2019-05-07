@@ -5,6 +5,7 @@ namespace Trafiklab\Sl\Model;
 
 use Trafiklab\Common\Model\Contract\RoutePlanningLeg;
 use Trafiklab\Common\Model\Contract\Stop;
+use Trafiklab\Common\Model\Contract\StopWithRealtime;
 use Trafiklab\Common\Model\Contract\Vehicle;
 
 /**
@@ -30,7 +31,7 @@ class SlLeg implements RoutePlanningLeg
 
     /**
      * The origin of this leg.
-     * @return Stop The stoplocation at which this leg starts.
+     * @return StopWithRealtime The stoplocation at which this leg starts.
      */
     public function getOrigin(): Stop
     {
@@ -39,7 +40,7 @@ class SlLeg implements RoutePlanningLeg
 
     /**
      * The destination of this leg.
-     * @return Stop The stoplocation at which this leg ends.
+     * @return StopWithRealtime The stoplocation at which this leg ends.
      */
     public function getDestination(): Stop
     {
@@ -108,20 +109,24 @@ class SlLeg implements RoutePlanningLeg
         if ($this->_type == "JNY") {
             $this->_vehicle = new SlVehicle($json['Product']);
 
+            $originTrack = key_exists('track', $json['Origin'])? $json['Origin']['track'] : null;
+            $this->_origin = new SlStop($json['Stops']['Stop'][0],$originTrack);
+            $destinationTrack = key_exists('track', $json['Destination'])? $json['Destination']['track'] : null;
+            $this->_destination = new SlStop(end($json['Stops']['Stop']), $destinationTrack);
             $this->_intermediaryStops = [];
             foreach ($json['Stops']['Stop'] as $stop) {
                 $this->_intermediaryStops[] = new SlStop($stop);
             }
+
             // The stops array also includes the departure and arrival. Pop them of and use them instead of the
             // origin and destination data delivered by the API. This approach uses only one data type instead
             // of 2, making it easier to handle for end users.
-            $this->_origin = array_shift($this->_intermediaryStops);
-            $this->_destination = array_pop($this->_intermediaryStops);
+            array_shift($this->_intermediaryStops);
+            array_pop($this->_intermediaryStops);
 
             $this->_direction = $json['direction'];
         } else {
             // Should Dist (distance) and Duration (time) be parsed in case of a walk?
-
             $this->_origin = new SlStop($json['Origin']);
             $this->_destination = new SlStop($json['Destination']);
         }

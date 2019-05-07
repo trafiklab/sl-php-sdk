@@ -19,9 +19,9 @@ class SlStop implements StopWithRealtime
     private $_realtimeArrivalTime;
     private $_realtimeDepartureTime;
 
-    public function __construct(array $json)
+    public function __construct(array $json, ?string $platform = null)
     {
-        $this->parseApiResponse($json);
+        $this->parseApiResponse($json, $platform);
     }
 
     /**
@@ -118,7 +118,12 @@ class SlStop implements StopWithRealtime
         return false;
     }
 
-    private function parseApiResponse(array $json)
+    /**
+     * @param array       $json     An array representing the API answer.
+     * @param null|string $platform The platform this stop will take place at, in case this information is provided
+     *                              outside the JSON API response
+     */
+    private function parseApiResponse(array $json, ?string $platform)
     {
         // Remove leading 30010
         $this->_stopId = substr($json['mainMastExtId'], 5);
@@ -151,7 +156,10 @@ class SlStop implements StopWithRealtime
                     $json['rtArrDate'] . ' ' . $json['rtArrDate']);
         }
 
-        if (key_exists('track', $json)) {
+
+        if ($platform !== null) {
+            $this->_platform = $platform;
+        } else if (key_exists('track', $json)) {
             $this->_platform = $json['track'];
         }
 

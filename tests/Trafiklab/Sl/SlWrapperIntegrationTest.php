@@ -179,7 +179,6 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
 
         $foundViaStation = false;
         foreach ($response->getTrips()[0]->getLegs() as $leg) {
-            var_dump($leg->getDestination()->getStopId());
             if ($leg->getDestination()->getStopId() == "9180") {
                 $foundViaStation = true;
             }
