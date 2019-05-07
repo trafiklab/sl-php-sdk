@@ -7,10 +7,13 @@ use Trafiklab\Common\Model\Contract\RoutePlanningLeg;
 use Trafiklab\Common\Model\Contract\Stop;
 use Trafiklab\Common\Model\Contract\StopWithRealtime;
 use Trafiklab\Common\Model\Contract\Vehicle;
+use Trafiklab\Common\Model\Contract\VehicleStop;
+use Trafiklab\Common\Model\Contract\VehicleStopWithRealtime;
 
 /**
  * A leg is one part of a journey, made with a single vehicle or on foot. A journey can consist of one or more legs. In
  * the case of multiple legs, a transfer is required between two legs.
+ *
  * @package Trafiklab\Sl\Model
  */
 class SlLeg implements RoutePlanningLeg
@@ -24,6 +27,13 @@ class SlLeg implements RoutePlanningLeg
     private $_type;
     private $_vehicle;
 
+    /**
+     * SlLeg constructor.
+     *
+     * @param array $json
+     *
+     * @internal
+     */
     public function __construct(array $json)
     {
         $this->parseApiResponse($json);
@@ -31,18 +41,20 @@ class SlLeg implements RoutePlanningLeg
 
     /**
      * The origin of this leg.
-     * @return StopWithRealtime The stoplocation at which this leg starts.
+     *
+     * @return VehicleStopWithRealtime The stoplocation at which this leg starts.
      */
-    public function getOrigin(): Stop
+    public function getOrigin(): VehicleStop
     {
         return $this->_origin;
     }
 
     /**
      * The destination of this leg.
-     * @return StopWithRealtime The stoplocation at which this leg ends.
+     *
+     * @return VehicleStopWithRealtime The stoplocation at which this leg ends.
      */
-    public function getDestination(): Stop
+    public function getDestination(): VehicleStop
     {
         return $this->_destination;
     }
@@ -50,6 +62,7 @@ class SlLeg implements RoutePlanningLeg
     /**
      * Remarks about this leg, for example describing facilities on board of a train, or possible disturbances on the
      * route.
+     *
      * @return string[]
      */
     public function getNotes(): array
@@ -60,6 +73,7 @@ class SlLeg implements RoutePlanningLeg
     /**
      * The vehicle which is used to travel from the origin to the destination of this leg, if any. Can be null in case
      * of a walk between two stop locations.
+     *
      * @return Vehicle|null The vehicle used on this leg, or null in case of a walking transfer.
      */
     public function getVehicle(): ?Vehicle
@@ -69,7 +83,8 @@ class SlLeg implements RoutePlanningLeg
 
     /**
      * Intermediary stops made by the vehicle on this leg.
-     * @return SlStop[] Stops between the origin and destination, excluding the origin and destination.
+     *
+     * @return SlVehicleStop[] Stops between the origin and destination, excluding the origin and destination.
      */
     public function getIntermediaryStops(): array
     {
@@ -79,6 +94,7 @@ class SlLeg implements RoutePlanningLeg
     /**
      * The direction of the vehicle on this leg. Can be null in case
      * of a walk between two stop locations.
+     *
      * @return string|null The direction of the vehicle used on this leg, or null in case of a walking transfer.
      */
     public function getDirection(): ?string
@@ -88,6 +104,7 @@ class SlLeg implements RoutePlanningLeg
 
     /**
      * JNY: journey, WALK: walking.
+     *
      * @return string
      */
     public function getType(): string
@@ -109,13 +126,13 @@ class SlLeg implements RoutePlanningLeg
         if ($this->_type == "JNY") {
             $this->_vehicle = new SlVehicle($json['Product']);
 
-            $originTrack = key_exists('track', $json['Origin'])? $json['Origin']['track'] : null;
-            $this->_origin = new SlStop($json['Stops']['Stop'][0],$originTrack);
-            $destinationTrack = key_exists('track', $json['Destination'])? $json['Destination']['track'] : null;
-            $this->_destination = new SlStop(end($json['Stops']['Stop']), $destinationTrack);
+            $originTrack = key_exists('track', $json['Origin']) ? $json['Origin']['track'] : null;
+            $this->_origin = new SlVehicleStop($json['Stops']['Stop'][0], $originTrack);
+            $destinationTrack = key_exists('track', $json['Destination']) ? $json['Destination']['track'] : null;
+            $this->_destination = new SlVehicleStop(end($json['Stops']['Stop']), $destinationTrack);
             $this->_intermediaryStops = [];
             foreach ($json['Stops']['Stop'] as $stop) {
-                $this->_intermediaryStops[] = new SlStop($stop);
+                $this->_intermediaryStops[] = new SlVehicleStop($stop);
             }
 
             // The stops array also includes the departure and arrival. Pop them of and use them instead of the
@@ -127,8 +144,8 @@ class SlLeg implements RoutePlanningLeg
             $this->_direction = $json['direction'];
         } else {
             // Should Dist (distance) and Duration (time) be parsed in case of a walk?
-            $this->_origin = new SlStop($json['Origin']);
-            $this->_destination = new SlStop($json['Destination']);
+            $this->_origin = new SlVehicleStop($json['Origin']);
+            $this->_destination = new SlVehicleStop($json['Destination']);
         }
 
     }

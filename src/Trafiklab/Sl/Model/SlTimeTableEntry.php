@@ -29,6 +29,12 @@ class SlTimeTableEntry implements TimeTableEntryWithRealTime
     private $_transportType;
     private $_isCancelled;
 
+    /**
+     * SlTimeTableEntry constructor.
+     *
+     * @param array $json
+     * @internal
+     */
     public function __construct(array $json)
     {
         $this->parseApiResponse($json);
@@ -76,6 +82,7 @@ class SlTimeTableEntry implements TimeTableEntryWithRealTime
 
     /**
      * The type of timetable in which this entry resides, either arrivals or departures.
+     *
      * @return int
      */
     public function getTimeTableType(): int
@@ -86,6 +93,7 @@ class SlTimeTableEntry implements TimeTableEntryWithRealTime
     /**
      * The direction of the vehicle stopping at this time at this stop location. In case of a vehicle departing, this
      * is the destination of the vehicle. In case of a vehicle arriving, this is the origin of the vehicle.
+     *
      * @return string
      */
     public function getDirection(): string
@@ -95,6 +103,7 @@ class SlTimeTableEntry implements TimeTableEntryWithRealTime
 
     /**
      * The name of the line on which the vehicle is driving.
+     *
      * @return string
      */
     public function getLineName(): string
@@ -104,6 +113,7 @@ class SlTimeTableEntry implements TimeTableEntryWithRealTime
 
     /**
      * The number of the line on which the vehicle is driving.
+     *
      * @return int
      */
     public function getLineNumber(): int
@@ -147,6 +157,7 @@ class SlTimeTableEntry implements TimeTableEntryWithRealTime
 
     /**
      * Whether or not this vehicle's trip is cancelled.
+     *
      * @return bool
      */
     public function isCancelled(): bool

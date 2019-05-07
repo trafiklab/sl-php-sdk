@@ -5,9 +5,9 @@ namespace Trafiklab\Sl\Model;
 
 
 use DateTime;
-use Trafiklab\Common\Model\Contract\StopWithRealtime;
+use Trafiklab\Common\Model\Contract\VehicleStopWithRealtime;
 
-class SlStop implements StopWithRealtime
+class SlVehicleStop implements VehicleStopWithRealtime
 {
     private $_stopId;
     private $_stopName;
@@ -19,6 +19,14 @@ class SlStop implements StopWithRealtime
     private $_realtimeArrivalTime;
     private $_realtimeDepartureTime;
 
+    /**
+     * SlVehicleStop constructor.
+     *
+     * @param array       $json
+     * @param null|string $platform
+     *
+     * @internal
+     */
     public function __construct(array $json, ?string $platform = null)
     {
         $this->parseApiResponse($json, $platform);
@@ -36,6 +44,7 @@ class SlStop implements StopWithRealtime
 
     /**
      * The name of this stoplocation.
+     *
      * @return string The name of this stoplocation.
      */
     public function getStopName(): string
@@ -54,6 +63,7 @@ class SlStop implements StopWithRealtime
 
     /**
      * The arrival time at this stop.
+     *
      * @return DateTime|null The arrival time at this stop. Null if there is no data about the arrival time at this
      *                       stop location.
      */
@@ -64,6 +74,7 @@ class SlStop implements StopWithRealtime
 
     /**
      * The latitude component of this stoplocation's coordinates.
+     *
      * @return float
      */
     public function getLatitude(): float
@@ -73,6 +84,7 @@ class SlStop implements StopWithRealtime
 
     /**
      * The longitude component of this stoplocation's coordinates.
+     *
      * @return float
      */
     public function getLongitude(): float
@@ -82,6 +94,7 @@ class SlStop implements StopWithRealtime
 
     /**
      * The platform at which the vehicle will stop.
+     *
      * @return null|string The platform at which the vehicle will stop. Null if no platform information is known.
      */
     public function getPlatform(): ?string
@@ -100,6 +113,7 @@ class SlStop implements StopWithRealtime
 
     /**
      * The arrival time at this stop.
+     *
      * @return DateTime|null The estimated (real-time) arrival time at this stop. Null if there is no data about the
      *                       arrival time at this stop area.
      */
@@ -110,6 +124,7 @@ class SlStop implements StopWithRealtime
 
     /**
      * Whether or not this vehicle's stop is cancelled.
+     *
      * @return bool
      */
     public function isCancelled(): bool

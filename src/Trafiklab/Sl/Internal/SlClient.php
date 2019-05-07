@@ -5,8 +5,8 @@ namespace Trafiklab\Sl\Internal;
 
 use Trafiklab\Common\Internal\CurlWebClient;
 use Trafiklab\Common\Internal\WebClient;
-use Trafiklab\Common\Internal\WebResponse;
 use Trafiklab\Common\Model\Contract\TimeTableResponse;
+use Trafiklab\Common\Model\Contract\WebResponse;
 use Trafiklab\Common\Model\Enum\TimeTableType;
 use Trafiklab\Common\Model\Exceptions\InvalidKeyException;
 use Trafiklab\Common\Model\Exceptions\InvalidRequestException;
@@ -19,6 +19,10 @@ use Trafiklab\Sl\Model\SlRoutePlanningResponse;
 use Trafiklab\Sl\Model\SlTimeTableRequest;
 use Trafiklab\Sl\Model\SlTimeTableResponse;
 
+/**
+ * @internal Builds requests and gets data.
+ * @package  Trafiklab\Sl\Internal
+ */
 class SlClient
 {
 
@@ -70,10 +74,10 @@ class SlClient
         }
 
         $response = $this->_webClient->makeRequest($endpoint, $parameters);
-        $json = json_decode($response->getBody(), true);
+        $json = json_decode($response->getResponseBody(), true);
 
         $this->validateSlResponse($response, $json, "SL departures");
-        return new SlTimeTableResponse($json);
+        return new SlTimeTableResponse($response, $json);
     }
 
     /**
@@ -117,10 +121,10 @@ class SlClient
         }
 
         $response = $this->_webClient->makeRequest(self::TRIPS_ENDPOINT, $parameters);
-        $json = json_decode($response->getBody(), true);
+        $json = json_decode($response->getResponseBody(), true);
 
         $this->validateSlResponse($response, $json, "SL reseplanerare");
-        return new SlRoutePlanningResponse($json);
+        return new SlRoutePlanningResponse($response, $json);
     }
 
 

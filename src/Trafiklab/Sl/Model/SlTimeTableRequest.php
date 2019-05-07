@@ -35,6 +35,7 @@ class SlTimeTableRequest extends SlBaseRequest
 
     /**
      * @param mixed $timeTableType
+     *
      */
     public function setTimeTableType(int $timeTableType): void
     {

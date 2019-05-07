@@ -12,7 +12,7 @@ class SlStopTest extends PHPUnit_Framework_TestCase
     function testConstructor_validDepartureBoardJson_shouldReturnCorrectObjectRepresentation()
     {
         $jsonArray = json_decode(file_get_contents("./tests/Resources/Sl/validRoutePlanningDepartureStop.json"), true);
-        $stop = new SlStop($jsonArray);
+        $stop = new SlVehicleStop($jsonArray);
 
         self::assertEquals("Sergels torg", $stop->getStopName());
         self::assertEquals(1000, $stop->getStopId());

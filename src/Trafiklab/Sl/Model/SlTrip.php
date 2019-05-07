@@ -10,6 +10,7 @@ use Trafiklab\Common\Model\Contract\Trip;
  * A Trip, often also called Journey, describes one possibility for travelling between two locations. A Trip can
  * consist of one or more legs. A leg is one part of a Trip, made with a single vehicle or on foot. In the case of
  * multiple legs, a transfer is required between two legs.
+ *
  * @package Trafiklab\Sl\Model
  */
 class SlTrip implements Trip
@@ -17,6 +18,13 @@ class SlTrip implements Trip
 
     private $_legs;
 
+    /**
+     * SlTrip constructor.
+     *
+     * @param array $json
+     *
+     * @internal
+     */
     public function __construct(array $json)
     {
         $this->parseApiResponse($json);
