@@ -40,9 +40,9 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
         $departuresRequest = new SlTimeTableRequest();
         $departuresRequest->setStopId("1000");
 
-        $slWrapper = SlWrapper::getInstance();
-        $slWrapper->registerUserAgent("SDK Integration tests");
-        $slWrapper->registerTimeTablesApiKey($this->_TIMETABLES_API_KEY);
+        $slWrapper = new SlWrapper();
+        $slWrapper->setUserAgent("SDK Integration tests");
+        $slWrapper->setTimeTablesApiKey($this->_TIMETABLES_API_KEY);
         $response = $slWrapper->getTimeTable($departuresRequest);
 
         self::assertEquals(TimeTableType::DEPARTURES, $response->getType());
@@ -53,9 +53,9 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
         $departuresRequest->setStopId("1001"); // Nybroplan boats
         $departuresRequest->setTimeTableType(TimeTableType::DEPARTURES);
 
-        $slWrapper = SlWrapper::getInstance();
-        $slWrapper->registerUserAgent("SDK Integration tests");
-        $slWrapper->registerTimeTablesApiKey($this->_TIMETABLES_API_KEY);
+        $slWrapper = new SlWrapper();
+        $slWrapper->setUserAgent("SDK Integration tests");
+        $slWrapper->setTimeTablesApiKey($this->_TIMETABLES_API_KEY);
         $response = $slWrapper->getTimeTable($departuresRequest);
 
         foreach ($response->getTimetable() as $timeTableEntry) {
@@ -79,9 +79,9 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
         $departuresRequest->setStopId("123.56");
         $departuresRequest->setTimeTableType(TimeTableType::DEPARTURES);
 
-        $slWrapper = SlWrapper::getInstance();
-        $slWrapper->registerUserAgent("SDK Integration tests");
-        $slWrapper->registerTimeTablesApiKey($this->_TIMETABLES_API_KEY);
+        $slWrapper = new SlWrapper();
+        $slWrapper->setUserAgent("SDK Integration tests");
+        $slWrapper->setTimeTablesApiKey($this->_TIMETABLES_API_KEY);
         $slWrapper->getTimeTable($departuresRequest);
 
     }
@@ -97,9 +97,9 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
         $departuresRequest->setStopId("1001");
         $departuresRequest->setTimeTableType(TimeTableType::DEPARTURES);
 
-        $slWrapper = SlWrapper::getInstance();
-        $slWrapper->registerUserAgent("SDK Integration tests");
-        $slWrapper->registerTimeTablesApiKey("ABC123");
+        $slWrapper = new SlWrapper();
+        $slWrapper->setUserAgent("SDK Integration tests");
+        $slWrapper->setTimeTablesApiKey("ABC123");
         $slWrapper->getTimeTable($departuresRequest);
     }
 
@@ -114,9 +114,9 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
         $departuresRequest->setStopId("1001");
         $departuresRequest->setTimeTableType(TimeTableType::DEPARTURES);
 
-        $slWrapper = SlWrapper::getInstance();
-        $slWrapper->registerUserAgent("SDK Integration tests");
-        $slWrapper->registerTimeTablesApiKey("");
+        $slWrapper = new SlWrapper();
+        $slWrapper->setUserAgent("SDK Integration tests");
+        $slWrapper->setTimeTablesApiKey("");
         $slWrapper->getTimeTable($departuresRequest);
     }
 
@@ -137,9 +137,9 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
         $routePlanningRequest->setDestinationId("1002");
         $routePlanningRequest->setDateTime($queryTime);
 
-        $slWrapper = SlWrapper::getInstance();
-        $slWrapper->registerUserAgent("SDK Integration tests");
-        $slWrapper->registerRoutePlanningApiKey($this->_ROUTEPLANNING_API_KEY);
+        $slWrapper = new SlWrapper();
+        $slWrapper->setUserAgent("SDK Integration tests");
+        $slWrapper->setRoutePlanningApiKey($this->_ROUTEPLANNING_API_KEY);
         $response = $slWrapper->getRoutePlanning($routePlanningRequest);
 
         self::assertTrue(count($response->getTrips()) > 0);
@@ -166,9 +166,9 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
         $routePlanningRequest->setViaId("9180");
         $routePlanningRequest->setDateTime($queryTime);
 
-        $slWrapper = SlWrapper::getInstance();
-        $slWrapper->registerUserAgent("SDK Integration tests");
-        $slWrapper->registerRoutePlanningApiKey($this->_ROUTEPLANNING_API_KEY);
+        $slWrapper = new SlWrapper();
+        $slWrapper->setUserAgent("SDK Integration tests");
+        $slWrapper->setRoutePlanningApiKey($this->_ROUTEPLANNING_API_KEY);
         $response = $slWrapper->getRoutePlanning($routePlanningRequest);
 
 
@@ -200,9 +200,9 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
         $routePlanningRequest->setOriginId("1001");
         $routePlanningRequest->setDestinationId("0");
 
-        $slWrapper = SlWrapper::getInstance();
-        $slWrapper->registerUserAgent("SDK Integration tests");
-        $slWrapper->registerRoutePlanningApiKey($this->_ROUTEPLANNING_API_KEY);
+        $slWrapper = new SlWrapper();
+        $slWrapper->setUserAgent("SDK Integration tests");
+        $slWrapper->setRoutePlanningApiKey($this->_ROUTEPLANNING_API_KEY);
         $slWrapper->getRoutePlanning($routePlanningRequest);
 
         $this->expectException(InvalidStoplocationException::class);
@@ -223,9 +223,9 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
         $routePlanningRequest->setOriginId("1001");
         $routePlanningRequest->setDestinationId("2002");
 
-        $slWrapper = SlWrapper::getInstance();
-        $slWrapper->registerUserAgent("SDK Integration tests");
-        $slWrapper->registerRoutePlanningApiKey("ABC123");
+        $slWrapper = new SlWrapper();
+        $slWrapper->setUserAgent("SDK Integration tests");
+        $slWrapper->setRoutePlanningApiKey("ABC123");
         $slWrapper->getRoutePlanning($routePlanningRequest);
     }
 
@@ -243,9 +243,9 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
         $routePlanningRequest->setOriginId("1001");
         $routePlanningRequest->setDestinationId("2002");
 
-        $slWrapper = slWrapper::getInstance();
-        $slWrapper->registerUserAgent("SDK Integration tests");
-        $slWrapper->registerRoutePlanningApiKey("");
+        $slWrapper = new SlWrapper();
+        $slWrapper->setUserAgent("SDK Integration tests");
+        $slWrapper->setRoutePlanningApiKey("");
         $slWrapper->getRoutePlanning($routePlanningRequest);
     }
 
@@ -268,9 +268,9 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
         $routePlanningRequest->setDestinationId("2002");
         $routePlanningRequest->setDateTime($queryTime);
 
-        $slWrapper = slWrapper::getInstance();
-        $slWrapper->registerUserAgent("SDK Integration tests");
-        $slWrapper->registerRoutePlanningApiKey($this->_ROUTEPLANNING_API_KEY);
+        $slWrapper = new SlWrapper();
+        $slWrapper->setUserAgent("SDK Integration tests");
+        $slWrapper->setRoutePlanningApiKey($this->_ROUTEPLANNING_API_KEY);
         $slWrapper->getRoutePlanning($routePlanningRequest);
     }
 

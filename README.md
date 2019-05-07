@@ -48,9 +48,9 @@ The following code example illustrates how you can retrieve a timetable for a ce
   $departuresRequest = new SlTimeTableRequest();
   $departuresRequest->setStopId("1000");
 
-  $slWrapper = SlWrapper::getInstance();
-  $slWrapper->registerUserAgent("<YOUR_USER_AGENT>");
-  $slWrapper->registerTimeTablesApiKey("<YOUR_API_KEY>");
+  $slWrapper = new SlWrapper();
+  $slWrapper->setUserAgent("<YOUR_USER_AGENT>");
+  $slWrapper->setTimeTablesApiKey("<YOUR_API_KEY>");
   $response = $slWrapper->getTimeTable($departuresRequest);
 ```
 `<YOUR_API_KEY>` is obtained from [Trafiklab](https://trafiklab.se). `<YOUR_USER_AGENT>` is a string which identifies your application. 

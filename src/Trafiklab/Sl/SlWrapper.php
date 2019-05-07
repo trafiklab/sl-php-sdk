@@ -12,42 +12,28 @@ use Trafiklab\Sl\Model\SlTimeTableRequest;
 
 class SlWrapper
 {
-
-    private static $_instance;
-
     private $_key_reseplanerare;
     private $_key_stolptidstabeller;
     private $_slClient;
 
-    private function __construct($_slClient = null)
+    public function __construct()
     {
-        // Private constructor for Singleton pattern
-        $this->_slClient = $_slClient;
-        if ($this->_slClient == null) {
-            $this->_slClient = new SlClient();
-        }
+        $this->_slClient = new SlClient();
     }
 
-    public static function getInstance(): slWrapper
-    {
-        if (self::$_instance == null) {
-            self::$_instance = new slWrapper();
-        }
-        return self::$_instance;
-    }
 
-    public function registerRoutePlanningApiKey(string $key): void
+    public function setRoutePlanningApiKey(string $key): void
     {
         $this->_key_reseplanerare = $key;
     }
 
-    public function registerTimeTablesApiKey(string $key): void
+    public function setTimeTablesApiKey(string $key): void
     {
         $this->_key_stolptidstabeller = $key;
     }
 
 
-    public function registerUserAgent(string $userAgent): void
+    public function setUserAgent(string $userAgent): void
     {
         $this->_slClient->setApplicationUserAgent($userAgent);
     }
