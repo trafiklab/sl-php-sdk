@@ -14,14 +14,6 @@ abstract class SlBaseRequest
     protected $_operatorFilter = [];
 
     /**
-     * @return array
-     */
-    public function getOperatorFilter(): array
-    {
-        return $this->_operatorFilter;
-    }
-
-    /**
      * @return int
      */
     public function getVehicleFilter(): int
@@ -43,7 +35,7 @@ abstract class SlBaseRequest
     /**
      * @param mixed $dateTime
      */
-    public function setDateTime(DateTime $dateTime): void
+    public function setDateTime(?DateTime $dateTime): void
     {
         $this->_dateTime = $dateTime;
         $this->_dateTime->setTimezone(new DateTimeZone('Europe/Stockholm'));
@@ -58,12 +50,4 @@ abstract class SlBaseRequest
 
     }
 
-    /**
-     * @param int $operatorCode
-     */
-    public function addOperatorToFilter(int $operatorCode): void
-    {
-        $this->_operatorFilter[] = $operatorCode;
-
-    }
 }

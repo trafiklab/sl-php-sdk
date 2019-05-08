@@ -2,9 +2,10 @@
 
 namespace Trafiklab\Sl\Model;
 
+use Trafiklab\Common\Model\Contract\TimeTableRequest;
 use Trafiklab\Common\Model\Enum\TimeTableType;
 
-class SlTimeTableRequest extends SlBaseRequest
+class SlTimeTableRequest extends SlBaseRequest implements TimeTableRequest
 {
     private $_timeTableType = TimeTableType::DEPARTURES;
     private $_stopId = "";

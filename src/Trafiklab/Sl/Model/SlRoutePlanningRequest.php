@@ -4,18 +4,22 @@
 namespace Trafiklab\Sl\Model;
 
 
-class SlRoutePlanningRequest extends SlBaseRequest
+use Trafiklab\Common\Model\Contract\RoutePlanningRequest;
+use Trafiklab\Common\Model\Enum\RoutePlanningSearchType;
+
+class SlRoutePlanningRequest extends SlBaseRequest implements RoutePlanningRequest
 {
 
     private $_originId;
     private $_destinationId;
     private $_viaId;
     private $_lang = "sv";
+    private $_routePlanningSearchType = RoutePlanningSearchType::DEPART_AT_SPECIFIED_TIME;
 
     /**
      * @return string
      */
-    public function getOriginId(): string
+    public function getOriginStopId(): string
     {
         return $this->_originId;
     }
@@ -23,7 +27,7 @@ class SlRoutePlanningRequest extends SlBaseRequest
     /**
      * @param string $originId
      */
-    public function setOriginId(string $originId): void
+    public function setOriginStopId(string $originId): void
     {
         $this->_originId = $originId;
     }
@@ -31,7 +35,7 @@ class SlRoutePlanningRequest extends SlBaseRequest
     /**
      * @return string
      */
-    public function getDestinationId(): string
+    public function getDestinationStopId(): string
     {
         return $this->_destinationId;
     }
@@ -39,7 +43,7 @@ class SlRoutePlanningRequest extends SlBaseRequest
     /**
      * @param string $destinationId
      */
-    public function setDestinationId(string $destinationId): void
+    public function setDestinationStopId(string $destinationId): void
     {
         $this->_destinationId = $destinationId;
     }
@@ -47,7 +51,7 @@ class SlRoutePlanningRequest extends SlBaseRequest
     /**
      * @return string
      */
-    public function getViaId(): ?string
+    public function getViaStopId(): ?string
     {
         return $this->_viaId;
     }
@@ -55,7 +59,7 @@ class SlRoutePlanningRequest extends SlBaseRequest
     /**
      * @param string $viaId
      */
-    public function setViaId(string $viaId): void
+    public function setViaStopId(?string $viaId): void
     {
         $this->_viaId = $viaId;
     }
@@ -77,4 +81,27 @@ class SlRoutePlanningRequest extends SlBaseRequest
     }
 
 
+    /**
+     * Get the type of time definition in this query. Either Arriving at a certain time, or departing at a certain time.
+     *
+     * @return int One of the constants defined in RoutePlanningSearchType
+     *
+     * @see RoutePlanningSearchType
+     */
+    public function getRoutePlanningSearchType(): int
+    {
+        return $this->_routePlanningSearchType;
+    }
+
+    /**
+     * Set the type of time definition in this query. Either Arriving at a certain time, or departing at a certain time.
+     *
+     * @param int $routePlanningSearchType One of the constants defined in RoutePlanningSearchType
+     *
+     * @see RoutePlanningSearchType
+     */
+    public function setRoutePlanningSearchType(int $routePlanningSearchType): void
+    {
+        $this->_routePlanningSearchType = $routePlanningSearchType;
+    }
 }

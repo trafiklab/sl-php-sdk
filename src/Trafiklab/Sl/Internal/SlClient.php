@@ -3,18 +3,21 @@
 
 namespace Trafiklab\Sl\Internal;
 
+use Exception;
 use Trafiklab\Common\Internal\CurlWebClient;
 use Trafiklab\Common\Internal\WebClient;
+use Trafiklab\Common\Model\Contract\RoutePlanningRequest;
 use Trafiklab\Common\Model\Contract\TimeTableResponse;
 use Trafiklab\Common\Model\Contract\WebResponse;
+use Trafiklab\Common\Model\Enum\RoutePlanningSearchType;
 use Trafiklab\Common\Model\Enum\TimeTableType;
 use Trafiklab\Common\Model\Exceptions\InvalidKeyException;
 use Trafiklab\Common\Model\Exceptions\InvalidRequestException;
 use Trafiklab\Common\Model\Exceptions\InvalidStoplocationException;
 use Trafiklab\Common\Model\Exceptions\KeyRequiredException;
 use Trafiklab\Common\Model\Exceptions\QuotaExceededException;
+use Trafiklab\Common\Model\Exceptions\RequestTimedOutException;
 use Trafiklab\Common\Model\Exceptions\ServiceUnavailableException;
-use Trafiklab\Sl\Model\SlRoutePlanningRequest;
 use Trafiklab\Sl\Model\SlRoutePlanningResponse;
 use Trafiklab\Sl\Model\SlTimeTableRequest;
 use Trafiklab\Sl\Model\SlTimeTableResponse;
@@ -49,14 +52,21 @@ class SlClient
      * @param SlTimeTableRequest $request
      *
      * @return TimeTableResponse
-     * @throws \Exception
+     * @throws InvalidKeyException
+     * @throws InvalidRequestException
+     * @throws InvalidStoplocationException
+     * @throws KeyRequiredException
+     * @throws QuotaExceededException
+     * @throws ServiceUnavailableException
+     * @throws RequestTimedOutException
+     * @throws Exception
      */
     public function getTimeTable(string $key, SlTimeTableRequest $request): TimeTableResponse
     {
 
         $endpoint = self::DEPARTURES_ENDPOINT;
         if ($request->getTimeTableType() == TimeTableType::ARRIVALS) {
-            throw new \Exception("This API does cannot provide arrivals information", 400);
+            throw new Exception("This API does cannot provide arrivals information", 400);
         }
 
         $parameters = [
@@ -67,10 +77,6 @@ class SlClient
 
         if ($request->getVehicleFilter() > 0) {
             $parameters['products'] = $request->getVehicleFilter();
-        }
-
-        if ($request->getOperatorFilter() != null) {
-            $parameters['operators'] = join(',', $request->getOperatorFilter());
         }
 
         $response = $this->_webClient->makeRequest($endpoint, $parameters);
@@ -90,20 +96,32 @@ class SlClient
 
     /**
      * @param                        $key
-     * @param SlRoutePlanningRequest $request
+     * @param RoutePlanningRequest   $request
      *
      * @return SlRoutePlanningResponse
-     * @throws \Exception
+     * @throws InvalidKeyException
+     * @throws InvalidRequestException
+     * @throws InvalidStoplocationException
+     * @throws KeyRequiredException
+     * @throws QuotaExceededException
+     * @throws RequestTimedOutException
+     * @throws ServiceUnavailableException
      */
-    public function getRoutePlanning($key, SlRoutePlanningRequest $request): SlRoutePlanningResponse
+    public function getRoutePlanning($key, RoutePlanningRequest $request): SlRoutePlanningResponse
     {
+        $searchForArrival = "0";
+        if ($request->getRoutePlanningSearchType() == RoutePlanningSearchType::ARRIVE_AT_SPECIFIED_TIME) {
+            $searchForArrival = "1";
+        }
+
         $parameters = [
             "key" => $key,
-            "originExtId" => $request->getOriginId(),
-            "destExtId" => $request->getDestinationId(),
+            "originExtId" => $request->getOriginStopId(),
+            "destExtId" => $request->getDestinationStopId(),
             "date" => $request->getDateTime()->format("Y-m-d"),
             "time" => $request->getDateTime()->format("H:i"),
             "lang" => $request->getLang(),
+            "searchForArrival" => $searchForArrival,
             "passlist" => "1",
         ];
 
@@ -112,12 +130,8 @@ class SlClient
             $parameters['products'] = $request->getVehicleFilter();
         }
 
-        if ($request->getOperatorFilter() != null) {
-            $parameters['operators'] = join(',', $request->getOperatorFilter());
-        }
-
-        if ($request->getViaId() != null) {
-            $parameters['viaId'] = $request->getViaId();
+        if ($request->getViaStopId() != null) {
+            $parameters['viaId'] = $request->getViaStopId();
         }
 
         $response = $this->_webClient->makeRequest(self::TRIPS_ENDPOINT, $parameters);

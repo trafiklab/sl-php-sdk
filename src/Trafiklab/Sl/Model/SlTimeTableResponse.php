@@ -3,7 +3,6 @@
 
 namespace Trafiklab\Sl\Model;
 
-use Exception;
 use Trafiklab\Common\Internal\WebResponseImpl;
 use Trafiklab\Common\Model\Contract\TimeTableEntryWithRealTime;
 use Trafiklab\Common\Model\Contract\TimeTableResponseWithRealTime;
@@ -23,7 +22,6 @@ class SlTimeTableResponse implements TimeTableResponseWithRealTime
      * @param array       $json        The API output to parse.
      *
      * @internal
-     * @throws Exception
      */
     public function __construct(WebResponse $webResponse, array $json)
     {
@@ -61,14 +59,9 @@ class SlTimeTableResponse implements TimeTableResponseWithRealTime
     /**
      * @param array $json The API output to parse.
      *
-     * @throws Exception
      */
     private function parseApiResponse(array $json): void
     {
-        if ($json['StatusCode'] > 0) {
-            throw new Exception('SL Departures threw an error: ' . $json['Message'], 500);
-        }
-
         foreach ($json['ResponseData']['Metros'] as $key => $entry) {
             $this->_timetable[] = new SlTimeTableEntry($entry);
         }

@@ -133,8 +133,8 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
         $queryTime->setTime(18, 0);
 
         $routePlanningRequest = new SlRoutePlanningRequest();
-        $routePlanningRequest->setOriginId("9192");
-        $routePlanningRequest->setDestinationId("1002");
+        $routePlanningRequest->setOriginStopId("9192");
+        $routePlanningRequest->setDestinationStopId("1002");
         $routePlanningRequest->setDateTime($queryTime);
 
         $slWrapper = new SlWrapper();
@@ -161,9 +161,9 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
         $queryTime->setTime(18, 0);
 
         $routePlanningRequest = new SlRoutePlanningRequest();
-        $routePlanningRequest->setOriginId("1002");
-        $routePlanningRequest->setDestinationId("9192");
-        $routePlanningRequest->setViaId("9180");
+        $routePlanningRequest->setOriginStopId("1002");
+        $routePlanningRequest->setDestinationStopId("9192");
+        $routePlanningRequest->setViaStopId("9180");
         $routePlanningRequest->setDateTime($queryTime);
 
         $slWrapper = new SlWrapper();
@@ -197,8 +197,8 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
 
         $this->expectException(InvalidRequestException::class);
         $routePlanningRequest = new SlRoutePlanningRequest();
-        $routePlanningRequest->setOriginId("1001");
-        $routePlanningRequest->setDestinationId("0");
+        $routePlanningRequest->setOriginStopId("1001");
+        $routePlanningRequest->setDestinationStopId("0");
 
         $slWrapper = new SlWrapper();
         $slWrapper->setUserAgent("SDK Integration tests");
@@ -207,8 +207,8 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
 
         $this->expectException(InvalidStoplocationException::class);
         $routePlanningRequest = new SlRoutePlanningRequest();
-        $routePlanningRequest->setOriginId("1001");
-        $routePlanningRequest->setDestinationId("45.45");
+        $routePlanningRequest->setOriginStopId("1001");
+        $routePlanningRequest->setDestinationStopId("45.45");
         $slWrapper->getRoutePlanning($routePlanningRequest);
     }
 
@@ -220,8 +220,8 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
         $this->expectException(InvalidKeyException::class);
 
         $routePlanningRequest = new SlRoutePlanningRequest();
-        $routePlanningRequest->setOriginId("1001");
-        $routePlanningRequest->setDestinationId("2002");
+        $routePlanningRequest->setOriginStopId("1001");
+        $routePlanningRequest->setDestinationStopId("2002");
 
         $slWrapper = new SlWrapper();
         $slWrapper->setUserAgent("SDK Integration tests");
@@ -240,8 +240,8 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
         $queryTime->setTime(18, 0);
 
         $routePlanningRequest = new SlRoutePlanningRequest();
-        $routePlanningRequest->setOriginId("1001");
-        $routePlanningRequest->setDestinationId("2002");
+        $routePlanningRequest->setOriginStopId("1001");
+        $routePlanningRequest->setDestinationStopId("2002");
 
         $slWrapper = new SlWrapper();
         $slWrapper->setUserAgent("SDK Integration tests");
@@ -264,8 +264,8 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
         $queryTime->setDate(2100, 1, 1);
 
         $routePlanningRequest = new SlRoutePlanningRequest();
-        $routePlanningRequest->setOriginId("1001");
-        $routePlanningRequest->setDestinationId("2002");
+        $routePlanningRequest->setOriginStopId("1001");
+        $routePlanningRequest->setDestinationStopId("2002");
         $routePlanningRequest->setDateTime($queryTime);
 
         $slWrapper = new SlWrapper();

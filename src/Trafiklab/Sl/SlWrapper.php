@@ -2,15 +2,24 @@
 
 namespace Sl;
 
-use Exception;
+use InvalidArgumentException;
+use Trafiklab\Common\Model\Contract\PublicTransportApiWrapper;
+use Trafiklab\Common\Model\Contract\RoutePlanningRequest;
 use Trafiklab\Common\Model\Contract\RoutePlanningResponse;
+use Trafiklab\Common\Model\Contract\TimeTableRequest;
 use Trafiklab\Common\Model\Contract\TimeTableResponse;
+use Trafiklab\Common\Model\Exceptions\InvalidKeyException;
+use Trafiklab\Common\Model\Exceptions\InvalidRequestException;
+use Trafiklab\Common\Model\Exceptions\InvalidStoplocationException;
 use Trafiklab\Common\Model\Exceptions\KeyRequiredException;
+use Trafiklab\Common\Model\Exceptions\QuotaExceededException;
+use Trafiklab\Common\Model\Exceptions\RequestTimedOutException;
+use Trafiklab\Common\Model\Exceptions\ServiceUnavailableException;
 use Trafiklab\Sl\Internal\SlClient;
 use Trafiklab\Sl\Model\SlRoutePlanningRequest;
 use Trafiklab\Sl\Model\SlTimeTableRequest;
 
-class SlWrapper
+class SlWrapper implements PublicTransportApiWrapper
 {
     private $_key_reseplanerare;
     private $_key_stolptidstabeller;
@@ -39,26 +48,47 @@ class SlWrapper
     }
 
     /**
-     * @param SlTimeTableRequest $request
+     * @param TimeTableRequest $request
      *
      * @return TimeTableResponse
-     * @throws Exception
+     * @throws KeyRequiredException
+     * @throws InvalidKeyException
+     * @throws InvalidRequestException
+     * @throws InvalidStoplocationException
+     * @throws QuotaExceededException
+     * @throws RequestTimedOutException
+     * @throws ServiceUnavailableException
      */
-    public function getTimeTable(SlTimeTableRequest $request): TimeTableResponse
+    public function getTimeTable(TimeTableRequest $request): TimeTableResponse
     {
         $this->requireValidTimeTablesKey();
+
+        if (!$request instanceof SlTimeTableRequest) {
+            throw new InvalidArgumentException("ResRobot requires a SlTimeTableRequest object");
+        }
+
         return $this->_slClient->getTimeTable($this->_key_stolptidstabeller, $request);
     }
 
     /**
-     * @param SlRoutePlanningRequest $request
+     * @param RoutePlanningRequest $request
      *
      * @return RoutePlanningResponse
-     * @throws Exception
+     * @throws InvalidKeyException
+     * @throws InvalidRequestException
+     * @throws InvalidStoplocationException
+     * @throws KeyRequiredException
+     * @throws QuotaExceededException
+     * @throws RequestTimedOutException
+     * @throws ServiceUnavailableException
      */
-    public function getRoutePlanning(SlRoutePlanningRequest $request): RoutePlanningResponse
+    public function getRoutePlanning(RoutePlanningRequest $request): RoutePlanningResponse
     {
         $this->requireValidRouteplannerKey();
+
+        if (!$request instanceof SlRoutePlanningRequest) {
+            throw new InvalidArgumentException("ResRobot requires a ResRobotRoutePlanningRequest object");
+        }
         return $this->_slClient->getRoutePlanning($this->_key_reseplanerare, $request);
     }
 
