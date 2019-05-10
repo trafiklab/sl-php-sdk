@@ -1,10 +1,9 @@
 <?php
 
-namespace Trafiklab\ResRobot\Model;
+namespace Trafiklab\Sl\Model;
 
 use PHPUnit_Framework_TestCase;
-use Trafiklab\Sl\Model\ResRobotStopLocationLookupEntry;
-use Trafiklab\Sl\Model\ResRobotStopLocationLookupResponse;
+use Trafiklab\Resrobot\Model\SlStopLocationLookupRequest;
 
 class SlStopLocationLookupRequestTest extends PHPUnit_Framework_TestCase
 {

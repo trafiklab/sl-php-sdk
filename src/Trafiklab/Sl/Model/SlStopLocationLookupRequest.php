@@ -1,6 +1,6 @@
 <?php
 
-namespace Trafiklab\Resrobot\Model;
+namespace Trafiklab\Sl\Model;
 
 use Trafiklab\Common\Model\Contract\StopLocationLookupRequest;
 
