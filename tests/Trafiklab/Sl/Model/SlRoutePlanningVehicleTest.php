@@ -7,7 +7,7 @@ namespace Trafiklab\Sl\Model;
 use PHPUnit_Framework_TestCase;
 use Trafiklab\Common\Model\Enum\TransportType;
 
-class SlVehicleTest extends PHPUnit_Framework_TestCase
+class SlRoutePlanningVehicleTest extends PHPUnit_Framework_TestCase
 {
     function testConstructor_validDepartureBoardJson_shouldReturnCorrectObjectRepresentation()
     {

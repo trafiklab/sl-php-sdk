@@ -7,7 +7,7 @@ namespace Trafiklab\Sl\Model;
 use DateTime;
 use PHPUnit_Framework_TestCase;
 
-class SlStopTest extends PHPUnit_Framework_TestCase
+class SlRoutePlanningStopTest extends PHPUnit_Framework_TestCase
 {
     function testConstructor_validDepartureBoardJson_shouldReturnCorrectObjectRepresentation()
     {

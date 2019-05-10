@@ -6,7 +6,7 @@ namespace Trafiklab\Sl\Model;
 
 use PHPUnit_Framework_TestCase;
 
-class SlTripTest extends PHPUnit_Framework_TestCase
+class SlRoutePlanningTripTest extends PHPUnit_Framework_TestCase
 {
     function testConstructor_validDepartureBoardJson_shouldReturnCorrectObjectRepresentation()
     {

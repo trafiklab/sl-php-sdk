@@ -4,7 +4,6 @@
 namespace Trafiklab\Sl\Model;
 
 
-use Exception;
 use Trafiklab\Common\Internal\WebResponseImpl;
 use Trafiklab\Common\Model\Contract\RoutePlanningResponse;
 use Trafiklab\Common\Model\Contract\WebResponse;
@@ -20,7 +19,6 @@ class SlRoutePlanningResponse implements RoutePlanningResponse
      * @param array       $json        The API output to parse.
      *
      * @internal
-     * @throws Exception
      */
     public function __construct(WebResponse $webResponse, array $json)
     {
@@ -48,14 +46,9 @@ class SlRoutePlanningResponse implements RoutePlanningResponse
 
     /**
      * @param array $json The API output to parse.
-     *
-     * @throws Exception
      */
     private function parseApiResponse(array $json): void
     {
-        if (key_exists('errorCode', $json)) {
-            throw new Exception('ResRobot threw an error: ' . $json['errorText'], 500);
-        }
 
         foreach ($json['Trip'] as $key => $entry) {
             $this->_trips[] = new SlTrip($entry);

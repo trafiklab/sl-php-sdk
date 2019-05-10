@@ -7,6 +7,8 @@ use Exception;
 use Trafiklab\Common\Internal\CurlWebClient;
 use Trafiklab\Common\Internal\WebClient;
 use Trafiklab\Common\Model\Contract\RoutePlanningRequest;
+use Trafiklab\Common\Model\Contract\StopLocationLookupRequest;
+use Trafiklab\Common\Model\Contract\StopLocationLookupResponse;
 use Trafiklab\Common\Model\Contract\TimeTableResponse;
 use Trafiklab\Common\Model\Contract\WebResponse;
 use Trafiklab\Common\Model\Enum\RoutePlanningSearchType;
@@ -18,7 +20,9 @@ use Trafiklab\Common\Model\Exceptions\KeyRequiredException;
 use Trafiklab\Common\Model\Exceptions\QuotaExceededException;
 use Trafiklab\Common\Model\Exceptions\RequestTimedOutException;
 use Trafiklab\Common\Model\Exceptions\ServiceUnavailableException;
+use Trafiklab\Sl\Model\SlFindStopLocationResponse;
 use Trafiklab\Sl\Model\SlRoutePlanningResponse;
+use Trafiklab\Sl\Model\SlStopLocationLookupResponse;
 use Trafiklab\Sl\Model\SlTimeTableRequest;
 use Trafiklab\Sl\Model\SlTimeTableResponse;
 
@@ -31,6 +35,7 @@ class SlClient
 
     public const DEPARTURES_ENDPOINT = "http://api.sl.se/api2/realtimedeparturesV4.json";
     public const TRIPS_ENDPOINT = "https://api.sl.se/api2/TravelplannerV3_1/trip.json";
+    public const PLATSUPPSLAG_ENDPOINT = "https://api.sl.se/api2/typeahead.json";
     public const SDK_USER_AGENT = "Trafiklab/Sl-php-sdk";
     private $applicationUserAgent = "Unknown";
     /**
@@ -95,8 +100,8 @@ class SlClient
     }
 
     /**
-     * @param                        $key
-     * @param RoutePlanningRequest   $request
+     * @param string               $key
+     * @param RoutePlanningRequest $request
      *
      * @return SlRoutePlanningResponse
      * @throws InvalidKeyException
@@ -107,7 +112,7 @@ class SlClient
      * @throws RequestTimedOutException
      * @throws ServiceUnavailableException
      */
-    public function getRoutePlanning($key, RoutePlanningRequest $request): SlRoutePlanningResponse
+    public function getRoutePlanning(string $key, RoutePlanningRequest $request): SlRoutePlanningResponse
     {
         $searchForArrival = "0";
         if ($request->getRoutePlanningSearchType() == RoutePlanningSearchType::ARRIVE_AT_SPECIFIED_TIME) {
@@ -139,6 +144,35 @@ class SlClient
 
         $this->validateSlResponse($response, $json, "SL reseplanerare");
         return new SlRoutePlanningResponse($response, $json);
+    }
+
+    /**
+     * @param string                  $key
+     * @param FindStopLocationRequest $request
+     *
+     * @return FindStopLocationResponse
+     * @throws InvalidKeyException
+     * @throws InvalidRequestException
+     * @throws InvalidStoplocationException
+     * @throws KeyRequiredException
+     * @throws QuotaExceededException
+     * @throws RequestTimedOutException
+     * @throws ServiceUnavailableException
+     */
+    public function lookupStopLocation(string $key, StopLocationLookupRequest $request): StopLocationLookupResponse
+    {
+        $parameters = [
+            "key" => $key,
+            "SearchString" => $request->getSearchQuery(),
+            "StationsOnly" => true,
+            "MaxResults" => $request->getMaxNumberOfResults(),
+        ];
+
+        $response = $this->_webClient->makeRequest(self::PLATSUPPSLAG_ENDPOINT, $parameters);
+        $json = json_decode($response->getResponseBody(), true);
+
+        $this->validateSlResponse($response, $json, "SL platsuppslag");
+        return new SlStopLocationLookupResponse($response, $json);
     }
 
 

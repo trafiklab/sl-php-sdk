@@ -1,0 +1,77 @@
+{
+    "StatusCode": 0,
+    "Message": null,
+    "ExecutionTime": 0,
+    "ResponseData": [
+        {
+            "Name": "T-Centralen (Stockholm)",
+            "SiteId": "9001",
+            "Type": "Station",
+            "X": "18060434",
+            "Y": "59331376"
+        },
+        {
+            "Name": "Centralen (Stockholm)",
+            "SiteId": "1002",
+            "Type": "Station",
+            "X": "18057657",
+            "Y": "59331134"
+        },
+        {
+            "Name": "Tcentralen (Stockholm)",
+            "SiteId": "9001",
+            "Type": "Station",
+            "X": "18060434",
+            "Y": "59331376"
+        },
+        {
+            "Name": "Hjälpmedelscentralen (Stockholm)",
+            "SiteId": "1661",
+            "Type": "Station",
+            "X": "17970291",
+            "Y": "59283167"
+        },
+        {
+            "Name": "Vårdcentralen (Värmdö)",
+            "SiteId": "4212",
+            "Type": "Station",
+            "X": "18379111",
+            "Y": "59323007"
+        },
+        {
+            "Name": "Panncentralen (Sigtuna)",
+            "SiteId": "5028",
+            "Type": "Station",
+            "X": "17859885",
+            "Y": "59634070"
+        },
+        {
+            "Name": "Stockholms central (Stockholm)",
+            "SiteId": "9000",
+            "Type": "Station",
+            "X": "18057657",
+            "Y": "59331134"
+        },
+        {
+            "Name": "Uppsala centralstation (Uppsala)",
+            "SiteId": "6086",
+            "Type": "Station",
+            "X": "17648513",
+            "Y": "59857254"
+        },
+        {
+            "Name": "Solna centrum (på Centralvägen) (Solna)",
+            "SiteId": "9954",
+            "Type": "Station",
+            "X": "18002283",
+            "Y": "59358659"
+        },
+        {
+            "Name": "Centralvägen (Skärsätra)  (Lidingö)",
+            "SiteId": "9247",
+            "Type": "Station",
+            "X": "18168494",
+            "Y": "59344006"
+        }
+    ]
+}
