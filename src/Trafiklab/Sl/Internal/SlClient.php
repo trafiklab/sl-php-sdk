@@ -15,12 +15,11 @@ use Trafiklab\Common\Model\Enum\RoutePlanningSearchType;
 use Trafiklab\Common\Model\Enum\TimeTableType;
 use Trafiklab\Common\Model\Exceptions\InvalidKeyException;
 use Trafiklab\Common\Model\Exceptions\InvalidRequestException;
-use Trafiklab\Common\Model\Exceptions\InvalidStoplocationException;
+use Trafiklab\Common\Model\Exceptions\InvalidStopLocationException;
 use Trafiklab\Common\Model\Exceptions\KeyRequiredException;
 use Trafiklab\Common\Model\Exceptions\QuotaExceededException;
 use Trafiklab\Common\Model\Exceptions\RequestTimedOutException;
 use Trafiklab\Common\Model\Exceptions\ServiceUnavailableException;
-use Trafiklab\Sl\Model\SlFindStopLocationResponse;
 use Trafiklab\Sl\Model\SlRoutePlanningResponse;
 use Trafiklab\Sl\Model\SlStopLocationLookupResponse;
 use Trafiklab\Sl\Model\SlTimeTableRequest;
@@ -76,7 +75,7 @@ class SlClient
 
         $parameters = [
             "key" => $key,
-            "SiteId" => $request->getStopId(),
+            "siteId" => $request->getStopId(),
             "passlist" => "0",
         ];
 
@@ -148,9 +147,9 @@ class SlClient
 
     /**
      * @param string                  $key
-     * @param FindStopLocationRequest $request
+     * @param StopLocationLookupRequest $request
      *
-     * @return FindStopLocationResponse
+     * @return StopLocationLookupResponse
      * @throws InvalidKeyException
      * @throws InvalidRequestException
      * @throws InvalidStoplocationException
@@ -227,7 +226,7 @@ class SlClient
                         $response->getRequestParameters());
                     break;
                 case '4001':
-                    throw new InvalidStoplocationException($response->getRequestParameters());
+                    throw new InvalidStopLocationException($response->getRequestParameters());
                     break;
                 default:
                     throw new InvalidRequestException($json['Message'], $response->getRequestParameters());

@@ -10,7 +10,7 @@ use Trafiklab\Common\Model\Enum\TimeTableType;
 use Trafiklab\Common\Model\Enum\TransportType;
 use Trafiklab\Common\Model\Exceptions\InvalidKeyException;
 use Trafiklab\Common\Model\Exceptions\InvalidRequestException;
-use Trafiklab\Common\Model\Exceptions\InvalidStoplocationException;
+use Trafiklab\Common\Model\Exceptions\InvalidStopLocationException;
 use Trafiklab\Common\Model\Exceptions\KeyRequiredException;
 use Trafiklab\Sl\Model\SlRoutePlanningRequest;
 use Trafiklab\Sl\Model\SlTimeTableRequest;
@@ -38,7 +38,7 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
         }
 
         $departuresRequest = new SlTimeTableRequest();
-        $departuresRequest->setStopId("1000");
+        $departuresRequest->setStopId("9001");
 
         $slWrapper = new SlWrapper();
         $slWrapper->setUserAgent("SDK Integration tests");
@@ -73,7 +73,7 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
             $this->markTestIncomplete();
         }
 
-        $this->expectException(InvalidStoplocationException::class);
+        $this->expectException(InvalidStopLocationException::class);
 
         $departuresRequest = new SlTimeTableRequest();
         $departuresRequest->setStopId("123.56");
