@@ -5,7 +5,6 @@ namespace Trafiklab\Sl;
 use DateTime;
 use Exception;
 use PHPUnit_Framework_TestCase;
-use Sl\SlWrapper;
 use Trafiklab\Common\Model\Enum\TimeTableType;
 use Trafiklab\Common\Model\Enum\TransportType;
 use Trafiklab\Common\Model\Exceptions\InvalidKeyException;

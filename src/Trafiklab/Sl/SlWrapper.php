@@ -1,6 +1,6 @@
 <?php
 
-namespace Sl;
+namespace Trafiklab\Sl;
 
 use InvalidArgumentException;
 use Trafiklab\Common\Model\Contract\PublicTransportApiWrapper;
