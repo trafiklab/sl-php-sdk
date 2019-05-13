@@ -116,7 +116,7 @@ class SlTimeTableEntry implements TimeTableEntryWithRealTime
      *
      * @return int
      */
-    public function getLineNumber(): int
+    public function getLineNumber(): string
     {
         return $this->_lineNumber;
     }
