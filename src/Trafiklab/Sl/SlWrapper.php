@@ -141,7 +141,7 @@ class SlWrapper implements PublicTransportApiWrapper
             throw new InvalidArgumentException("SL requires an SlStopLocationLookupRequest object");
         }
 
-        return $this->_slClient->lookupStopLocation($this->_key_reseplanerare, $request);
+        return $this->_slClient->lookupStopLocation($this->_key_platsuppslag, $request);
     }
 
     /**
