@@ -17,9 +17,9 @@ use Trafiklab\Common\Model\Exceptions\KeyRequiredException;
 use Trafiklab\Common\Model\Exceptions\QuotaExceededException;
 use Trafiklab\Common\Model\Exceptions\RequestTimedOutException;
 use Trafiklab\Common\Model\Exceptions\ServiceUnavailableException;
-use Trafiklab\Resrobot\Model\SlStopLocationLookupRequest;
 use Trafiklab\Sl\Internal\SlClient;
 use Trafiklab\Sl\Model\SlRoutePlanningRequest;
+use Trafiklab\Sl\Model\SlStopLocationLookupRequest;
 use Trafiklab\Sl\Model\SlTimeTableRequest;
 
 class SlWrapper implements PublicTransportApiWrapper
@@ -120,9 +120,9 @@ class SlWrapper implements PublicTransportApiWrapper
     /**
      * Find a stoplocation based on (a part of) its name.
      *
-     * @param FindStopLocationRequest $request The request object containing the query parameters.
+     * @param SlStopLocationLookupRequest $request The request object containing the query parameters.
      *
-     * @return FindStopLocationResponse The response from the API.
+     * @return StopLocationLookupResponse The response from the API.
      *
      * @return RoutePlanningResponse
      * @throws InvalidKeyException
@@ -138,7 +138,7 @@ class SlWrapper implements PublicTransportApiWrapper
         $this->requireValidLookupStopLocationKey();
 
         if (!$request instanceof SlStopLocationLookupRequest) {
-            throw new InvalidArgumentException("SL requires an SlFindStopLocationRequest object");
+            throw new InvalidArgumentException("SL requires an SlStopLocationLookupRequest object");
         }
 
         return $this->_slClient->lookupStopLocation($this->_key_reseplanerare, $request);
