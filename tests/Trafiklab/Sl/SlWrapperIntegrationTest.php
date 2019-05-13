@@ -12,12 +12,14 @@ use Trafiklab\Common\Model\Exceptions\InvalidRequestException;
 use Trafiklab\Common\Model\Exceptions\InvalidStopLocationException;
 use Trafiklab\Common\Model\Exceptions\KeyRequiredException;
 use Trafiklab\Sl\Model\SlRoutePlanningRequest;
+use Trafiklab\Sl\Model\SlStopLocationLookupRequest;
 use Trafiklab\Sl\Model\SlTimeTableRequest;
 
 class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
 {
     private $_TIMETABLES_API_KEY;
     private $_ROUTEPLANNING_API_KEY;
+    private $_STOPLOCATIONLOOKUP_API_KEY;
 
     public function __construct(?string $name = null, array $data = [], string $dataName = '')
     {
@@ -25,6 +27,7 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
         $keys = $this->getTestKeys();
         $this->_TIMETABLES_API_KEY = $keys['SLREALTID4_API_KEY'];
         $this->_ROUTEPLANNING_API_KEY = $keys['SLPLANNER31_API_KEY'];
+        $this->_STOPLOCATIONLOOKUP_API_KEY = $keys['SLPLATSUPPSLAG_API_KEY'];
     }
 
     /**
@@ -271,6 +274,94 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
         $slWrapper->setUserAgent("SDK Integration tests");
         $slWrapper->setRoutePlanningApiKey($this->_ROUTEPLANNING_API_KEY);
         $slWrapper->getRoutePlanning($routePlanningRequest);
+    }
+
+
+    public function testGetStopLocation_searchForCity_shouldReturnLargestStopsFirst()
+    {
+        if (empty($this->_STOPLOCATIONLOOKUP_API_KEY)) {
+            $this->markTestIncomplete();
+        }
+        $slWrapper = new SlWrapper();
+        $slWrapper->setUserAgent("SDK Integration tests");
+        $slWrapper->setStopLocationLookupApiKey($this->_STOPLOCATIONLOOKUP_API_KEY);
+
+        $stopLocationLookupRequest = new SlStopLocationLookupRequest();
+        $stopLocationLookupRequest->setSearchQuery("Stockholm");
+        $response = $slWrapper->lookupStopLocation($stopLocationLookupRequest);
+        /**
+         *  ...
+         * {
+         * "Name": "Stockholm City (Stockholm)",
+         * "SiteId": "1080",
+         * "Type": "Station",
+         * "X": "18059293",
+         * "Y": "59331008"
+         * },
+         * {
+         * "Name": "Stockholms central (Stockholm)",
+         * "SiteId": "9000",
+         * "Type": "Station",
+         * "X": "18057657",
+         * "Y": "59331134"
+         * },
+         * {
+         * "Name": "Stockholm Odenplan (Stockholm)",
+         * "SiteId": "1079",
+         * "Type": "Station",
+         * "X": "18045683",
+         * "Y": "59343116"
+         * },
+         * {
+         * "Name": "Stockholms östra (Stockholm)",
+         * "SiteId": "9600",
+         * "Type": "Station",
+         * "X": "18071707",
+         * "Y": "59345543"
+         * },
+         *  ...
+         */
+        self::assertEquals("1080", $response->getFoundStopLocations()[0]->getId());
+        self::assertEquals("9000", $response->getFoundStopLocations()[1]->getId());
+
+        $stopLocationLookupRequest = new SlStopLocationLookupRequest();
+        $stopLocationLookupRequest->setSearchQuery("Sollentuna");
+        $response = $slWrapper->lookupStopLocation($stopLocationLookupRequest);
+        /**
+         *  ...
+         * {
+         * "Name": "Sollentuna (Sollentuna)",
+         * "SiteId": "9506",
+         * "Type": "Station",
+         * "X": "17948186",
+         * "Y": "59429592"
+         * },
+         * {
+         * "Name": "Sollentuna centrum (Sollentuna)",
+         * "SiteId": "9506",
+         * "Type": "Station",
+         * "X": "17948186",
+         * "Y": "59429592"
+         * },
+         * {
+         * "Name": "Sollentuna station (Sollentuna)",
+         * "SiteId": "9506",
+         * "Type": "Station",
+         * "X": "17948186",
+         * "Y": "59429592"
+         * },
+         * {
+         * "Name": "Sollentunavallen (Sollentuna)",
+         * "SiteId": "5530",
+         * "Type": "Station",
+         * "X": "17950146",
+         * "Y": "59435750"
+         * },
+         *  ...
+         */
+        self::assertEquals("9506", $response->getFoundStopLocations()[0]->getId());
+        self::assertEquals("Sollentuna (Sollentuna)", $response->getFoundStopLocations()[0]->getName());
+
     }
 
     /**
