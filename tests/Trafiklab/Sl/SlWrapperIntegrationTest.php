@@ -11,8 +11,6 @@ use Trafiklab\Common\Model\Exceptions\InvalidKeyException;
 use Trafiklab\Common\Model\Exceptions\InvalidRequestException;
 use Trafiklab\Common\Model\Exceptions\InvalidStopLocationException;
 use Trafiklab\Common\Model\Exceptions\KeyRequiredException;
-use Trafiklab\Sl\Model\SlRoutePlanningRequest;
-use Trafiklab\Sl\Model\SlStopLocationLookupRequest;
 use Trafiklab\Sl\Model\SlTimeTableRequest;
 
 class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
@@ -50,7 +48,6 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
         self::assertEquals(TimeTableType::DEPARTURES, $response->getType());
         self::assertEquals("SL", $response->getTimetable()[0]->getOperator());
 
-
         $departuresRequest = new SlTimeTableRequest();
         $departuresRequest->setStopId("1001"); // Nybroplan boats
         $departuresRequest->setTimeTableType(TimeTableType::DEPARTURES);
@@ -77,11 +74,11 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
 
         $this->expectException(InvalidStopLocationException::class);
 
-        $departuresRequest = new SlTimeTableRequest();
+        $slWrapper = new SlWrapper();
+        $departuresRequest = $slWrapper->createTimeTableRequestObject();
         $departuresRequest->setStopId("123.56");
         $departuresRequest->setTimeTableType(TimeTableType::DEPARTURES);
 
-        $slWrapper = new SlWrapper();
         $slWrapper->setUserAgent("SDK Integration tests");
         $slWrapper->setTimeTablesApiKey($this->_TIMETABLES_API_KEY);
         $slWrapper->getTimeTable($departuresRequest);
@@ -95,11 +92,11 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
     public function testGetDepartures_invalidApiKey_shouldThrowException()
     {
         $this->expectException(InvalidKeyException::class);
-        $departuresRequest = new SlTimeTableRequest();
+        $slWrapper = new SlWrapper();
+        $departuresRequest = $slWrapper->createTimeTableRequestObject();
         $departuresRequest->setStopId("1001");
         $departuresRequest->setTimeTableType(TimeTableType::DEPARTURES);
 
-        $slWrapper = new SlWrapper();
         $slWrapper->setUserAgent("SDK Integration tests");
         $slWrapper->setTimeTablesApiKey("ABC123");
         $slWrapper->getTimeTable($departuresRequest);
@@ -112,11 +109,11 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
     {
         $this->expectException(KeyRequiredException::class);
 
-        $departuresRequest = new SlTimeTableRequest();
+        $slWrapper = new SlWrapper();
+        $departuresRequest = $slWrapper->createTimeTableRequestObject();
         $departuresRequest->setStopId("1001");
         $departuresRequest->setTimeTableType(TimeTableType::DEPARTURES);
 
-        $slWrapper = new SlWrapper();
         $slWrapper->setUserAgent("SDK Integration tests");
         $slWrapper->setTimeTablesApiKey("");
         $slWrapper->getTimeTable($departuresRequest);
@@ -134,12 +131,12 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
         $queryTime = new DateTime();
         $queryTime->setTime(18, 0);
 
-        $routePlanningRequest = new SlRoutePlanningRequest();
+        $slWrapper = new SlWrapper();
+        $routePlanningRequest = $slWrapper->createRoutePlanningRequestObject();
         $routePlanningRequest->setOriginStopId("9192");
         $routePlanningRequest->setDestinationStopId("1002");
         $routePlanningRequest->setDateTime($queryTime);
 
-        $slWrapper = new SlWrapper();
         $slWrapper->setUserAgent("SDK Integration tests");
         $slWrapper->setRoutePlanningApiKey($this->_ROUTEPLANNING_API_KEY);
         $response = $slWrapper->getRoutePlanning($routePlanningRequest);
@@ -162,13 +159,13 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
         $queryTime = new DateTime();
         $queryTime->setTime(18, 0);
 
-        $routePlanningRequest = new SlRoutePlanningRequest();
+        $slWrapper = new SlWrapper();
+        $routePlanningRequest = $slWrapper->createRoutePlanningRequestObject();
         $routePlanningRequest->setOriginStopId("1002");
         $routePlanningRequest->setDestinationStopId("9192");
         $routePlanningRequest->setViaStopId("9180");
         $routePlanningRequest->setDateTime($queryTime);
 
-        $slWrapper = new SlWrapper();
         $slWrapper->setUserAgent("SDK Integration tests");
         $slWrapper->setRoutePlanningApiKey($this->_ROUTEPLANNING_API_KEY);
         $response = $slWrapper->getRoutePlanning($routePlanningRequest);
@@ -197,18 +194,18 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
             $this->markTestIncomplete();
         }
 
+        $slWrapper = new SlWrapper();
         $this->expectException(InvalidRequestException::class);
-        $routePlanningRequest = new SlRoutePlanningRequest();
+        $routePlanningRequest = $slWrapper->createRoutePlanningRequestObject();
         $routePlanningRequest->setOriginStopId("1001");
         $routePlanningRequest->setDestinationStopId("0");
 
-        $slWrapper = new SlWrapper();
         $slWrapper->setUserAgent("SDK Integration tests");
         $slWrapper->setRoutePlanningApiKey($this->_ROUTEPLANNING_API_KEY);
         $slWrapper->getRoutePlanning($routePlanningRequest);
 
         $this->expectException(InvalidStoplocationException::class);
-        $routePlanningRequest = new SlRoutePlanningRequest();
+        $routePlanningRequest = $slWrapper->createRoutePlanningRequestObject();
         $routePlanningRequest->setOriginStopId("1001");
         $routePlanningRequest->setDestinationStopId("45.45");
         $slWrapper->getRoutePlanning($routePlanningRequest);
@@ -221,11 +218,11 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
     {
         $this->expectException(InvalidKeyException::class);
 
-        $routePlanningRequest = new SlRoutePlanningRequest();
+        $slWrapper = new SlWrapper();
+        $routePlanningRequest = $slWrapper->createRoutePlanningRequestObject();
         $routePlanningRequest->setOriginStopId("1001");
         $routePlanningRequest->setDestinationStopId("2002");
 
-        $slWrapper = new SlWrapper();
         $slWrapper->setUserAgent("SDK Integration tests");
         $slWrapper->setRoutePlanningApiKey("ABC123");
         $slWrapper->getRoutePlanning($routePlanningRequest);
@@ -241,11 +238,11 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
         $queryTime = new DateTime();
         $queryTime->setTime(18, 0);
 
-        $routePlanningRequest = new SlRoutePlanningRequest();
+        $slWrapper = new SlWrapper();
+        $routePlanningRequest = $slWrapper->createRoutePlanningRequestObject();
         $routePlanningRequest->setOriginStopId("1001");
         $routePlanningRequest->setDestinationStopId("2002");
 
-        $slWrapper = new SlWrapper();
         $slWrapper->setUserAgent("SDK Integration tests");
         $slWrapper->setRoutePlanningApiKey("");
         $slWrapper->getRoutePlanning($routePlanningRequest);
@@ -265,12 +262,13 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
         $queryTime = new DateTime();
         $queryTime->setDate(2100, 1, 1);
 
-        $routePlanningRequest = new SlRoutePlanningRequest();
+        $slWrapper = new SlWrapper();
+
+        $routePlanningRequest = $slWrapper->createRoutePlanningRequestObject();
         $routePlanningRequest->setOriginStopId("1001");
         $routePlanningRequest->setDestinationStopId("2002");
         $routePlanningRequest->setDateTime($queryTime);
 
-        $slWrapper = new SlWrapper();
         $slWrapper->setUserAgent("SDK Integration tests");
         $slWrapper->setRoutePlanningApiKey($this->_ROUTEPLANNING_API_KEY);
         $slWrapper->getRoutePlanning($routePlanningRequest);
@@ -286,7 +284,7 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
         $slWrapper->setUserAgent("SDK Integration tests");
         $slWrapper->setStopLocationLookupApiKey($this->_STOPLOCATIONLOOKUP_API_KEY);
 
-        $stopLocationLookupRequest = new SlStopLocationLookupRequest();
+        $stopLocationLookupRequest = $slWrapper->createStopLocationLookupRequestObject();
         $stopLocationLookupRequest->setSearchQuery("Stockholm");
         $response = $slWrapper->lookupStopLocation($stopLocationLookupRequest);
         /**
@@ -324,7 +322,7 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
         self::assertEquals("1080", $response->getFoundStopLocations()[0]->getId());
         self::assertEquals("9000", $response->getFoundStopLocations()[1]->getId());
 
-        $stopLocationLookupRequest = new SlStopLocationLookupRequest();
+        $stopLocationLookupRequest = $slWrapper->createStopLocationLookupRequestObject();
         $stopLocationLookupRequest->setSearchQuery("Sollentuna");
         $response = $slWrapper->lookupStopLocation($stopLocationLookupRequest);
         /**

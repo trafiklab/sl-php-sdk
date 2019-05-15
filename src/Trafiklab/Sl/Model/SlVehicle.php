@@ -16,6 +16,7 @@ class SlVehicle implements Vehicle
     private $_operatorCode;
     private $_operatorName;
     private $_operatorUrl;
+    private $_line;
 
     /**
      * Product constructor.
@@ -87,6 +88,16 @@ class SlVehicle implements Vehicle
         return $this->_operatorName;
     }
 
+    /**
+     * The line number of the vehicle, identifying the line on which it runs. Example: 41X.
+     *
+     * @return string
+     */
+    public function getLineNumber(): string
+    {
+        return $this->_line;
+    }
+
     private function parseApiResponse(array $json)
     {
         $this->_name = $json['name'];
@@ -113,5 +124,7 @@ class SlVehicle implements Vehicle
         $this->_operatorCode = 275;
         $this->_operatorName = "SL";
         $this->_operatorUrl = "https://sl.se";
+
+        $this->_line = $json['line'];
     }
 }

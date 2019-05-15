@@ -176,4 +176,19 @@ class SlWrapper implements PublicTransportApiWrapper
                 "No StopLocationLookup API key configured. Obtain a free key at https://www.trafiklab.se/api");
         }
     }
+
+    public function createTimeTableRequestObject(): TimeTableRequest
+    {
+        return new SlTimeTableRequest();
+    }
+
+    public function createRoutePlanningRequestObject(): RoutePlanningRequest
+    {
+        return new SlRoutePlanningRequest();
+    }
+
+    public function createStopLocationLookupRequestObject(): StopLocationLookupRequest
+    {
+        return new SlStopLocationLookupRequest();
+    }
 }

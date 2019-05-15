@@ -20,5 +20,6 @@ class SlRoutePlanningVehicleTest extends PHPUnit_Framework_TestCase
         self::assertEquals("SL", $vehicle->getOperatorName());
         self::assertEquals(275, $vehicle->getOperatorCode());
         self::assertEquals("https://sl.se", $vehicle->getOperatorUrl());
+        self::assertEquals("57", $vehicle->getLineNumber());
     }
 }
