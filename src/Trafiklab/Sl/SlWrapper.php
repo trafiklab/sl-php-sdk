@@ -40,7 +40,7 @@ class SlWrapper implements PublicTransportApiWrapper
      *
      * @param string $key The API key to use.
      */
-    public function setRoutePlanningApiKey(string $key): void
+    public function setRoutePlanningApiKey(?string $key): void
     {
         $this->_key_reseplanerare = $key;
     }
@@ -50,7 +50,7 @@ class SlWrapper implements PublicTransportApiWrapper
      *
      * @param string $key The API key to use.
      */
-    public function setTimeTablesApiKey(string $key): void
+    public function setTimeTablesApiKey(?string $key): void
     {
         $this->_key_stolptidstabeller = $key;
     }
@@ -61,12 +61,12 @@ class SlWrapper implements PublicTransportApiWrapper
      *
      * @param string $key The API key to use.
      */
-    public function setStopLocationLookupApiKey(string $key): void
+    public function setStopLocationLookupApiKey(?string $key): void
     {
         $this->_key_platsuppslag = $key;
     }
 
-    public function setUserAgent(string $userAgent): void
+    public function setUserAgent(?string $userAgent): void
     {
         $this->_slClient->setApplicationUserAgent($userAgent);
     }
