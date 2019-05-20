@@ -39,10 +39,10 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
         if (empty($this->_TIMETABLES_API_KEY)) {
             $this->_TIMETABLES_API_KEY = getenv('TIMETABLES_API_KEY');
         }
-        if (empty($this->_TIMETABLES_API_KEY)) {
+        if (empty($this->_ROUTEPLANNING_API_KEY)) {
             $this->_ROUTEPLANNING_API_KEY = getenv('ROUTEPLANNING_API_KEY');
         }
-        if (empty($this->_TIMETABLES_API_KEY)) {
+        if (empty($this->_STOPLOCATIONLOOKUP_API_KEY)) {
             $this->_STOPLOCATIONLOOKUP_API_KEY = getenv('LOCATIONLOOKUP_API_KEY');
         }
     }
