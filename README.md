@@ -1,6 +1,7 @@
 # SL PHP SDK
 
 [![Build status](https://travis-ci.com/trafiklab/sl-php-sdk.svg?branch=master)](https://travis-ci.com/trafiklab/sl-php-sdk)
+[![Latest Stable Version](https://poser.pugx.org/trafiklab/sl-php-sdk/version)](https://packagist.org/packages/trafiklab/sl-php-sdk)
 [![codecov](https://codecov.io/gh/trafiklab/sl-php-sdk/branch/master/graph/badge.svg)](https://codecov.io/gh/trafiklab/sl-php-sdk)
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
 
