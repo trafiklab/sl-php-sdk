@@ -22,10 +22,29 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
     public function __construct(?string $name = null, array $data = [], string $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
-        $keys = $this->getTestKeys();
-        $this->_TIMETABLES_API_KEY = $keys['SLREALTID4_API_KEY'];
-        $this->_ROUTEPLANNING_API_KEY = $keys['SLPLANNER31_API_KEY'];
-        $this->_STOPLOCATIONLOOKUP_API_KEY = $keys['SLPLATSUPPSLAG_API_KEY'];
+        $testKeysFromFile = $this->getTestKeysFromFile();
+
+        // Try and get keys from a .testkeys file
+        if ($testKeysFromFile != null && key_exists('TIMETABLES_API_KEY', $testKeysFromFile)) {
+            $this->_TIMETABLES_API_KEY = $testKeysFromFile['TIMETABLES_API_KEY'];
+        }
+        if ($testKeysFromFile != null && key_exists('ROUTEPLANNING_API_KEY', $testKeysFromFile)) {
+            $this->_ROUTEPLANNING_API_KEY = $testKeysFromFile['ROUTEPLANNING_API_KEY'];
+        }
+        if ($testKeysFromFile != null && key_exists('LOCATIONLOOKUP_API_KEY', $testKeysFromFile)) {
+            $this->_STOPLOCATIONLOOKUP_API_KEY = $testKeysFromFile['LOCATIONLOOKUP_API_KEY'];
+        }
+
+        // Get keys from environment if the file isn't present
+        if (empty($this->_TIMETABLES_API_KEY)) {
+            $this->_TIMETABLES_API_KEY = getenv('TIMETABLES_API_KEY');
+        }
+        if (empty($this->_TIMETABLES_API_KEY)) {
+            $this->_ROUTEPLANNING_API_KEY = getenv('ROUTEPLANNING_API_KEY');
+        }
+        if (empty($this->_TIMETABLES_API_KEY)) {
+            $this->_STOPLOCATIONLOOKUP_API_KEY = getenv('LOCATIONLOOKUP_API_KEY');
+        }
     }
 
     /**
@@ -367,8 +386,11 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    private function getTestKeys(): array
+    private function getTestKeysFromFile(): array
     {
+        if (!file_exists(".testkeys")) {
+            return [];
+        }
 
         try {
             $testKeys = [];

@@ -2,6 +2,6 @@
 # Leaving keys empty will skip the tests which require the missing key.
 # Copy this file to .testKeys in order to use it.
 
-SLPLANNER31_API_KEY=
-SLREALTID4_API_KEY=
-SLPLATSUPPSLAG_API_KEY=
+ROUTEPLANNING_API_KEY=
+TIMETABLES_API_KEY=
+LOCATIONLOOKUP_API_KEY=

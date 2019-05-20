@@ -37,6 +37,7 @@ class SlWrapper implements PublicTransportApiWrapper
 
     /**
      * Set the API key used for finding routes from A to B.
+     * For SL, this a key to SL Reseplanerare 3.1.
      *
      * @param string $key The API key to use.
      */
@@ -47,6 +48,7 @@ class SlWrapper implements PublicTransportApiWrapper
 
     /**
      * Set the API key used for getting departures and arrivals boards.
+     * For SL, this a key to SL Realtid 4.
      *
      * @param string $key The API key to use.
      */
@@ -58,6 +60,7 @@ class SlWrapper implements PublicTransportApiWrapper
 
     /**
      * Set the API key used for finding stop locations.
+     * For SL, this a key to SL Platsuppslag.
      *
      * @param string $key The API key to use.
      */
@@ -144,6 +147,21 @@ class SlWrapper implements PublicTransportApiWrapper
         return $this->_slClient->lookupStopLocation($this->_key_platsuppslag, $request);
     }
 
+    public function createTimeTableRequestObject(): TimeTableRequest
+    {
+        return new SlTimeTableRequest();
+    }
+
+    public function createRoutePlanningRequestObject(): RoutePlanningRequest
+    {
+        return new SlRoutePlanningRequest();
+    }
+
+    public function createStopLocationLookupRequestObject(): StopLocationLookupRequest
+    {
+        return new SlStopLocationLookupRequest();
+    }
+
     /**
      * @throws KeyRequiredException
      */
@@ -175,20 +193,5 @@ class SlWrapper implements PublicTransportApiWrapper
             throw new KeyRequiredException(
                 "No StopLocationLookup API key configured. Obtain a free key at https://www.trafiklab.se/api");
         }
-    }
-
-    public function createTimeTableRequestObject(): TimeTableRequest
-    {
-        return new SlTimeTableRequest();
-    }
-
-    public function createRoutePlanningRequestObject(): RoutePlanningRequest
-    {
-        return new SlRoutePlanningRequest();
-    }
-
-    public function createStopLocationLookupRequestObject(): StopLocationLookupRequest
-    {
-        return new SlStopLocationLookupRequest();
     }
 }
