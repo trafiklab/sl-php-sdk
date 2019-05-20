@@ -1,5 +1,9 @@
 # SL PHP SDK
 
+[![Build status](https://travis-ci.com/trafiklab/sl-php-sdk.svg?branch=master)](https://travis-ci.com/trafiklab/sl-php-sdk)
+[![codecov](https://codecov.io/gh/trafiklab/sl-php-sdk/branch/master/graph/badge.svg)](https://codecov.io/gh/trafiklab/sl-php-sdk)
+[![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
+
 Storstockholms Lokaltrafik (SL) offers real-time data about Stockholm's public transport. 
 Using it you can show all departures and arrivals for a stop, or easily plan a route from A to B.
 More information can be found at [the Trafiklab website](https://www.trafiklab.se/api/).
