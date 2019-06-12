@@ -162,8 +162,8 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
 
         self::assertTrue(count($response->getTrips()) > 0);
         $firstTripLegs = $response->getTrips()[0]->getLegs();
-        self::assertEquals("9192", $firstTripLegs[0]->getOrigin()->getStopId());
-        self::assertEquals("1002", end($firstTripLegs)->getDestination()->getStopId());
+        self::assertEquals("9192", $firstTripLegs[0]->getDeparture()->getStopId());
+        self::assertEquals("1002", end($firstTripLegs)->getArrival()->getStopId());
     }
 
     /**
@@ -192,12 +192,12 @@ class SlWrapperIntegrationTest extends PHPUnit_Framework_TestCase
 
         self::assertTrue(count($response->getTrips()) > 0);
         $firstTripLegs = $response->getTrips()[0]->getLegs();
-        self::assertEquals("1002", $firstTripLegs[0]->getOrigin()->getStopId());
-        self::assertEquals("9192", end($firstTripLegs)->getDestination()->getStopId());
+        self::assertEquals("1002", $firstTripLegs[0]->getDeparture()->getStopId());
+        self::assertEquals("9192", end($firstTripLegs)->getArrival()->getStopId());
 
         $foundViaStation = false;
         foreach ($response->getTrips()[0]->getLegs() as $leg) {
-            if ($leg->getDestination()->getStopId() == "9180") {
+            if ($leg->getArrival()->getStopId() == "9180") {
                 $foundViaStation = true;
             }
         }

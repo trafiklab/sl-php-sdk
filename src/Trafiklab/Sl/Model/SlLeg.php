@@ -44,7 +44,7 @@ class SlLeg implements RoutePlanningLeg
      *
      * @return VehicleStopWithRealtime The stoplocation at which this leg starts.
      */
-    public function getOrigin(): VehicleStop
+    public function getDeparture(): VehicleStop
     {
         return $this->_origin;
     }
@@ -54,9 +54,24 @@ class SlLeg implements RoutePlanningLeg
      *
      * @return VehicleStopWithRealtime The stoplocation at which this leg ends.
      */
-    public function getDestination(): VehicleStop
+    public function getArrival(): VehicleStop
     {
         return $this->_destination;
+    }
+
+    /**
+     * Get the duration of this leg in seconds.
+     *
+     * @return int
+     */
+    public function getDuration(): int
+    {
+        if ($this->getArrival()->getScheduledArrivalTime() == null
+            || $this->getDeparture()->getScheduledDepartureTime() == null) {
+            return 0;
+        }
+        return $this->getArrival()->getScheduledArrivalTime()->getTimestamp() -
+            $this->getDeparture()->getScheduledDepartureTime()->getTimestamp();
     }
 
     /**

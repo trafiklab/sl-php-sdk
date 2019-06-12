@@ -66,28 +66,82 @@ If you don't want to send a user agent, you can just leave out this line.
 Detailed information about SL request parameters can be found at [the Trafiklab website](https://www.trafiklab.se/api/).
 Only the most important/most used request parameters are implemented in the SDK, in order to reduce clutter, and to ensure that we can keep the SDK unchanged in case of changes to the API.
 If you believe we have missed an important field, please create an issue so we can review this.  
+
 ##### Response
 
 In order to use the data returned by your request, you can simply call getTimeTable() on the response object. 
 This method returns an array of TimeTableEntry instances, each of which describes one departure or arrival. 
 You can look at the code and PHPDoc in order to get up-to-date information on which fields are available. 
-Detailed information about SL responses can be found at [the Trafiklab website](https://www.trafiklab.se/api/).
+Detailed information about ResRobot responses can be found at [the Trafiklab website](https://www.trafiklab.se/api/).
 
+The following code gives a quick idea on how the SDK is used.
 ```
-   $response->getTimetable()
+$entry = $response->getTimetable()[0]; // Get the first result
+// Type of transport, one of the constants in Trafiklab\Common\Model\Enum\TransportType
+$entry->getTransportType(); 
+// The name of the stop location
+$stop = $timeTableEntry->getStopName()
+// The number of the line
+$lineNumber = $timeTableEntry->getLineNumber();
+// The direction of the vehicle
+$direction = $timeTableEntry->getDirection();
+// The scheduled departure time at the stop
+$scheduledStopTime = $timeTableEntry->getScheduledStopTime();   
 ```
-
 #### Routeplanning
 ##### Request
 The following code example illustrates how you can plan a route from A to B
 
 ```    
-    // TODO: add example
+$queryTime = new DateTime();
+$queryTime->setTime(18, 0);
+
+$wrapper = new SlWrapper();
+
+// Create a new routeplanning object. The wrapper will instantiate an object of the interface type.
+$wrapper = $wrapper->createRoutePlanningRequestObject();
+$wrapper->setOriginId("740000001");
+$wrapper->setDestinationId("740000002");
+$wrapper->setDateTime($queryTime);
+
+$wrapper->setUserAgent(("<YOUR_USER_AGENT>");
+$wrapper->setRoutePlanningApiKey("<YOUR_API_KEY>");
+$response = $resRobotWrapper->getRoutePlanning($routePlanningRequest);
 ```
 ##### Response
 
+In order to use the data returned by your request, you can simply call getTrips() on the response object. 
+This method returns an array of Trip instances, each of which describes one departure or arrival. 
+You can look at the code and PHPDoc in order to get up-to-date information on which fields are available. 
+Detailed information about ResRobot responses can be found at the [ResRobot departures/arrivals API page](https://www.trafiklab.se/api/resrobot-reseplanerare).
+
+The following code gives a quick idea on how the SDK is used.
+
 ```
-   // TODO: add example
+$trip = $response->getTrips()[0]; // Get the first result
+
+// Tell the user about every leg in their journey.
+foreach ($trip->getLegs() as $leg) {
+
+   // There are two types of legs (at this moment): Vehicle journeys, where a vehicle is used, or walking parts
+   // where a user walks between two stations. Not all fields are available for walking parts, so we need to handle them differently.
+
+   if ($leg->getType() == RoutePlanningLegType::VEHICLE_JOURNEY) {
+       $leg->getVehicle()->getType();
+       $leg->getVehicle()->getNumber();
+       $leg->getDirection();
+       $leg->getDeparture()->getStopName();
+       $leg->getDeparture()->getScheduledDepartureTime()->format("H:i");
+       $leg->getDeparture()->getScheduledDepartureTime()->getTimestamp();
+       $leg->getArrival()->getScheduledArrivalTime()->getTimestamp(); 
+       $leg->getArrival()->getStopName();
+       // More fields are available
+   } else if ($leg->getType() == RoutePlanningLegType::WALKING) {
+       // Limited fields when walking!
+       $leg->getDeparture()->getStopName(); // origin
+       $leg->getArrival()->getStopName(); // destination
+   }
+}
 ```
 
 ## Contributing

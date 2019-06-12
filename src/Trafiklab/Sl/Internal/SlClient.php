@@ -124,7 +124,7 @@ class SlClient
             "destExtId" => $request->getDestinationStopId(),
             "date" => $request->getDateTime()->format("Y-m-d"),
             "time" => $request->getDateTime()->format("H:i"),
-            "lang" => $request->getLang(),
+            "lang" => $request->getLanguage(),
             "searchForArrival" => $searchForArrival,
             "passlist" => "1",
         ];

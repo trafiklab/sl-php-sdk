@@ -14,6 +14,9 @@ class SlRoutePlanningTripTest extends PHPUnit_Framework_TestCase
         $trip = new SlTrip($jsonArray);
         self::assertNotNull($trip->getLegs());
         self::assertEquals(8, count($trip->getLegs()));
+        self::assertEquals(23580, $trip->getDuration());
+        self::assertEquals(1000, $trip->getDeparture()->getStopId());
+        self::assertEquals(5000, $trip->getArrival()->getStopId());
     }
 
 }

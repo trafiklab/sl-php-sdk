@@ -67,7 +67,7 @@ class SlRoutePlanningRequest extends SlBaseRequest implements RoutePlanningReque
     /**
      * @return string
      */
-    public function getLang(): string
+    public function getLanguage(): string
     {
         return $this->_lang;
     }
@@ -75,7 +75,7 @@ class SlRoutePlanningRequest extends SlBaseRequest implements RoutePlanningReque
     /**
      * @param string $lang
      */
-    public function setLang(string $lang): void
+    public function setLanguage(string $lang): void
     {
         $this->_lang = $lang;
     }
