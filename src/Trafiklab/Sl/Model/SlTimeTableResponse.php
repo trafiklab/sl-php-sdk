@@ -8,12 +8,14 @@
 namespace Trafiklab\Sl\Model;
 
 use Trafiklab\Common\Internal\WebResponseImpl;
+use Trafiklab\Common\Model\Contract\TimeTableEntry;
 use Trafiklab\Common\Model\Contract\TimeTableEntryWithRealTime;
+use Trafiklab\Common\Model\Contract\TimeTableResponse;
 use Trafiklab\Common\Model\Contract\TimeTableResponseWithRealTime;
 use Trafiklab\Common\Model\Contract\WebResponse;
 use Trafiklab\Common\Model\Enum\TimeTableType;
 
-class SlTimeTableResponse implements TimeTableResponseWithRealTime
+class SlTimeTableResponse implements TimeTableResponse
 {
 
     private $_timetable = [];
@@ -34,7 +36,7 @@ class SlTimeTableResponse implements TimeTableResponseWithRealTime
     }
 
     /**
-     * @return TimeTableEntryWithRealTime[] The requested timetable as an array of timetable entries.
+     * @return TimeTableEntry[] The requested timetable as an array of timetable entries.
      */
     public function getTimetable(): array
     {

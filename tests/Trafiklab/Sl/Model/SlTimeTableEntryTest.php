@@ -24,6 +24,7 @@ class SlTimeTableEntryTest extends PHPUnit_Framework_TestCase
         self::assertEquals("17:29", $entry->getDisplayTime());
         self::assertEquals("14", $entry->getLineNumber());
         self::assertEquals("28958", $entry->getTripNumber());
+        self::assertEquals("3", $entry->getPlatform());
         self::assertEquals(TransportType::METRO, $entry->getTransportType());
         self::assertEquals(false, $entry->isCancelled());
         self::assertEquals(new DateTime("2019-04-29T17:29:00"), $entry->getScheduledStopTime());

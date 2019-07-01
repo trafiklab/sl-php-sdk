@@ -8,7 +8,7 @@
 namespace Trafiklab\Sl\Model;
 
 use DateTime;
-use Trafiklab\Common\Model\Contract\TimeTableEntryWithRealTime;
+use Trafiklab\Common\Model\Contract\TimeTableEntry;
 use Trafiklab\Common\Model\Enum\TimeTableType;
 use Trafiklab\Common\Model\Enum\TransportType;
 
@@ -18,7 +18,7 @@ use Trafiklab\Common\Model\Enum\TransportType;
  *
  * @package Trafiklab\Sl\Model
  */
-class SlTimeTableEntry implements TimeTableEntryWithRealTime
+class SlTimeTableEntry implements TimeTableEntry
 {
     private $_stopId;
     private $_stopName;
@@ -32,12 +32,14 @@ class SlTimeTableEntry implements TimeTableEntryWithRealTime
     private $_displayTime;
     private $_tripNumber;
     private $_transportType;
-    private $_isCancelled;
+    private $_isCancelled = false;
+    private $_platform = null;
 
     /**
      * SlTimeTableEntry constructor.
      *
      * @param array $json
+     *
      * @internal
      */
     public function __construct(array $json)
@@ -170,6 +172,16 @@ class SlTimeTableEntry implements TimeTableEntryWithRealTime
         return $this->_isCancelled;
     }
 
+    /**
+     * The track or platform where the vehicle will halt.
+     *
+     * @return String
+     */
+    public function getPlatform(): ?string
+    {
+        return $this->_platform;
+    }
+
     private function parseApiResponse(array $json): void
     {
         $this->_stopId = $json['StopAreaNumber'];
@@ -187,6 +199,7 @@ class SlTimeTableEntry implements TimeTableEntryWithRealTime
         $this->_tripNumber = $json['JourneyNumber'];
         $this->_operator = "SL";
         $this->_direction = $json['Destination'];
+        $this->_platform = $json['StopPointDesignation'];
 
         switch ($json['TransportMode']) {
             case "TRAIN":
