@@ -17,6 +17,7 @@ use Trafiklab\Common\Model\Contract\TimeTableResponse;
 use Trafiklab\Common\Model\Contract\WebResponse;
 use Trafiklab\Common\Model\Enum\RoutePlanningSearchType;
 use Trafiklab\Common\Model\Enum\TimeTableType;
+use Trafiklab\Common\Model\Exceptions\DateTimeOutOfRangeException;
 use Trafiklab\Common\Model\Exceptions\InvalidKeyException;
 use Trafiklab\Common\Model\Exceptions\InvalidRequestException;
 use Trafiklab\Common\Model\Exceptions\InvalidStopLocationException;
@@ -50,7 +51,7 @@ class SlClient
     {
         $this->_webClient = $webClient;
         if ($webClient == null) {
-            $this->_webClient = new CurlWebClient( self::SDK_USER_AGENT);
+            $this->_webClient = new CurlWebClient(self::SDK_USER_AGENT);
         }
     }
 
@@ -147,12 +148,17 @@ class SlClient
         $response = $this->_webClient->makeRequest(self::TRIPS_ENDPOINT, $parameters);
         $json = json_decode($response->getResponseBody(), true);
 
+        if ($json == null) {
+            // Prevent unexpected behaviour/exceptions if the SL API is acting up.
+            throw new ServiceUnavailableException($response->getRequestUrl());
+        }
+
         $this->validateSlResponse($response, $json, "SL reseplanerare");
         return new SlRoutePlanningResponse($response, $json);
     }
 
     /**
-     * @param string                  $key
+     * @param string                    $key
      * @param StopLocationLookupRequest $request
      *
      * @return StopLocationLookupResponse
@@ -236,6 +242,32 @@ class SlClient
                     break;
                 default:
                     throw new InvalidRequestException($json['Message'], $response->getRequestParameters());
+                    break;
+            }
+        }
+        if (key_exists('errorCode', $json)) {
+            switch ($json['errorCode']) {
+                case 'API_AUTH':
+                    throw new InvalidKeyException($response->getRequestParameter('key'));
+                    break;
+                case 'API_QUOTA':
+                    throw new QuotaExceededException($api,
+                        $response->getRequestParameter('key'));
+                    break;
+                case 'API_PARAM':
+                    throw new InvalidRequestException("One or more parameters are invalid",
+                        $response->getRequestParameters());
+                    break;
+                case 'SVC_LOC_NEAR':
+                case 'SVC_LOC':
+                    throw new InvalidStopLocationException($response->getRequestParameters());
+                    break;
+                case 'SVC_DATATIME_PERIOD':
+                    throw new DateTimeOutOfRangeException($response->getRequestParameters(),
+                        $response->getRequestParameter('date'));
+                    break;
+                default:
+                    throw new InvalidRequestException($json['errorText'], $response->getRequestParameters());
                     break;
             }
         }
