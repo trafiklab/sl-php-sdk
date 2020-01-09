@@ -50,7 +50,7 @@ class SlClient
     {
         $this->_webClient = $webClient;
         if ($webClient == null) {
-            $this->_webClient = new CurlWebClient($this->getUserAgent());
+            $this->_webClient = new CurlWebClient( self::SDK_USER_AGENT);
         }
     }
 
@@ -74,7 +74,7 @@ class SlClient
 
         $endpoint = self::DEPARTURES_ENDPOINT;
         if ($request->getTimeTableType() == TimeTableType::ARRIVALS) {
-            throw new Exception("This API does cannot provide arrivals information", 400);
+            throw new Exception("This API cannot provide arrivals information", 400);
         }
 
         $parameters = [
@@ -100,6 +100,8 @@ class SlClient
     public function setApplicationUserAgent(string $applicationUserAgent): void
     {
         $this->applicationUserAgent = $applicationUserAgent;
+        // Get the complete user agent string from the getter method and pass it on the the webclient.
+        $this->_webClient->setUserAgent($this->getUserAgent());
     }
 
     /**
